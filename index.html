@@ -53,32 +53,32 @@
     <!-- The following 45 images are dynamically rendered -->
     <script>
       const watercolorImages = [
-        "1855x2690_DSC00417.JPG", "1871x2693_DSC00415.JPG", "2175x2785_DSC00425.JPG",
-        "2178x2732_DSC00420.JPG", "2178x2753_DSC00424.JPG", "2178x2754_DSC00418.JPG",
-        "2180x2784_DSC00427.JPG", "2183x2762_DSC00423.JPG", "2190x2708_DSC00426.JPG",
-        "2199x2727_DSC00419.JPG", "2202x2787_DSC00422.JPG", "2207x2716_DSC00421.JPG",
-        "2483x2386_DSC00413.JPG", "2490x2368_DSC00405.JPG", "2495x2386_DSC00409.JPG",
-        "2498x2374_DSC00414.JPG", "2498x2378_DSC00411.JPG", "2498x2389_DSC00410.JPG",
-        "2502x3223_DSC00442.JPG", "2503x2384_DSC00406.JPG", "2505x2385_DSC00408.JPG",
-        "2505x3232_DSC00437.JPG", "2506x2373_DSC00416.JPG", "2506x2385_DSC00407.JPG",
-        "2506x3227_DSC00436.JPG", "2507x3230_DSC00444.JPG", "2507x3232_DSC00433.JPG",
-        "2507x3237_DSC00434.JPG", "2508x3227_DSC00438.JPG", "2508x3235_DSC00439.JPG",
-        "2509x3222_DSC00441.JPG", "2510x3222_DSC00443.JPG", "2510x3235_DSC00432.JPG",
-        "2510x3240_DSC00431.JPG", "2511x2380_DSC00412.JPG", "2511x3222_DSC00440.JPG",
-        "2512x3228_DSC00445.JPG", "2515x3240_DSC00430.JPG", "2518x3237_DSC00435.JPG",
-        "2551x2504_DSC00402.JPG", "2731x2611_DSC00403.JPG", "2946x2302_DSC00428.JPG",
-        "3227x2497_DSC00429.JPG"
+        "1855x2690_DSC00417.jpg", "1871x2693_DSC00415.jpg", "2175x2785_DSC00425.jpg",
+        "2178x2732_DSC00420.jpg", "2178x2753_DSC00424.jpg", "2178x2754_DSC00418.jpg",
+        "2180x2784_DSC00427.jpg", "2183x2762_DSC00423.jpg", "2190x2708_DSC00426.jpg",
+        "2199x2727_DSC00419.jpg", "2202x2787_DSC00422.jpg", "2207x2716_DSC00421.jpg",
+        "2483x2386_DSC00413.jpg", "2490x2368_DSC00405.jpg", "2495x2386_DSC00409.jpg",
+        "2498x2374_DSC00414.jpg", "2498x2378_DSC00411.jpg", "2498x2389_DSC00410.jpg",
+        "2502x3223_DSC00442.jpg", "2503x2384_DSC00406.jpg", "2505x2385_DSC00408.jpg",
+        "2505x3232_DSC00437.jpg", "2506x2373_DSC00416.jpg", "2506x2385_DSC00407.jpg",
+        "2506x3227_DSC00436.jpg", "2507x3230_DSC00444.jpg", "2507x3232_DSC00433.jpg",
+        "2507x3237_DSC00434.jpg", "2508x3227_DSC00438.jpg", "2508x3235_DSC00439.jpg",
+        "2509x3222_DSC00441.jpg", "2510x3222_DSC00443.jpg", "2510x3235_DSC00432.jpg",
+        "2510x3240_DSC00431.jpg", "2511x2380_DSC00412.jpg", "2511x3222_DSC00440.jpg",
+        "2512x3228_DSC00445.jpg", "2515x3240_DSC00430.jpg", "2518x3237_DSC00435.jpg",
+        "2551x2504_DSC00402.jpg", "2731x2611_DSC00403.jpg", "2946x2302_DSC00428.jpg",
+        "3227x2497_DSC00429.jpg"
       ];
 
       const container = document.currentScript.parentElement;
       watercolorImages.forEach(filename => {
         const [dimensions, namePart] = filename.split("_");
-        const alt = namePart.replace(".JPG", "");
+        const alt = namePart.replace(".jpg", "");
         const img = document.createElement("div");
         img.className = "grid-item";
         img.innerHTML = `
-          <a href="watercolorpencils/${filename}" data-lightbox="watercolor" data-title="${alt}">
-            <img src="watercolorpencils/${filename}" alt="${alt}">
+          <a href="images/watercolorpencils/${filename}" data-lightbox="watercolor" data-title="${alt}">
+            <img src="images/watercolorpencils/${filename}" alt="${alt}">
             <div class="hover-text">${alt} - ${dimensions}</div>
           </a>`;
         container.appendChild(img);
@@ -89,8 +89,8 @@
 
   <h3>Canvas</h3>
   <div class="grid" id="canvas-gallery">
-    <div class="grid-item"><a href="images/canvas/2715x2546_DSC00446.JPG" data-lightbox="canvas" data-title="DSC00446"><img src="images/canvas/2715x2546_DSC00446.JPG" alt="DSC00446"><div class="hover-text">DSC00446 - 2715x2546</div></a></div>
-    <div class="grid-item"><a href="images/canvas/2721x2547_DSC00447.JPG" data-lightbox="canvas" data-title="DSC00447"><img src="images/canvas/2721x2547_DSC00447.JPG" alt="DSC00447"><div class="hover-text">DSC00447 - 2721x2547</div></a></div>
+    <div class="grid-item"><a href="images/canvas/2715x2546_DSC00446.jpg" data-lightbox="canvas" data-title="DSC00446"><img src="images/canvas/2715x2546_DSC00446.jpg" alt="DSC00446"><div class="hover-text">DSC00446 - 2715x2546</div></a></div>
+    <div class="grid-item"><a href="images/canvas/2721x2547_DSC00447.jpg" data-lightbox="canvas" data-title="DSC00447"><img src="images/canvas/2721x2547_DSC00447.jpg" alt="DSC00447"><div class="hover-text">DSC00447 - 2721x2547</div></a></div>
   </div>
 </section>
 
