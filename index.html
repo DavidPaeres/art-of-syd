@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Art made by Sydney</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet">
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #111; color: #fff; }
     header { text-align: center; padding: 40px 20px; background: #222; }
@@ -11,48 +12,81 @@
     p.subtitle { font-size: 1.2em; color: #ccc; }
     .gallery-section { padding: 40px 20px; }
     h2 { border-bottom: 1px solid #444; padding-bottom: 10px; }
+    h3 { color: #ff69b4; margin-top: 30px; }
     .grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
-    .grid img { width: 100%; max-width: 250px; height: auto; border-radius: 8px; }
+    .grid-item { position: relative; width: calc(33.333% - 20px); }
+    .grid img { width: 100%; height: auto; border-radius: 8px; cursor: pointer; }
+    .hover-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      border-radius: 0 0 8px 8px;
+    }
+    .grid-item:hover .hover-text { opacity: 1; }
+    .load-more { display: block; margin: 20px auto; padding: 10px 20px; background: #ff69b4; color: white; border: none; border-radius: 5px; cursor: pointer; }
     footer { text-align: center; padding: 20px; background: #222; margin-top: 40px; }
     a.button { display: inline-block; padding: 10px 20px; background: #ff69b4; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Art made by Sydney</h1>
-    <p class="subtitle">Welcome to my trippy world.</p>
-    <a class="button" href="#contact">Contact</a>
-  </header>
+<header>
+  <h1>Art made by Sydney</h1>
+  <p class="subtitle">Welcome to my trippy world.</p>
+  <a class="button" href="#contact">Contact</a>
+</header>
 
-  <section class="gallery-section" id="paints">
-    <h2>Paints</h2>
-    <div class="grid">
-      <img src="images/paint1.jpg" alt="Paint 1">
-      <img src="images/paint2.jpg" alt="Paint 2">
-    </div>
-  </section>
+<section class="gallery-section" id="paintings">
+  <h2>Paintings</h2>
 
-  <section class="gallery-section" id="crafts">
-    <h2>Crafts</h2>
-    <div class="grid">
-      <img src="images/craft1.jpg" alt="Craft 1">
-      <img src="images/craft2.jpg" alt="Craft 2">
-    </div>
-  </section>
+  <h3>Watercolor & Colorpencils</h3>
+  <div class="grid" id="watercolor-gallery">
+    <!-- Replace with real image paths and info -->
+    <div class="grid-item"><a href="images/paint1.jpg" data-lightbox="watercolor" data-title="Watercolor 1"><img src="images/paint1.jpg" alt="Watercolor 1"><div class="hover-text">Watercolor 1 - 8x10"</div></a></div>
+    <div class="grid-item"><a href="images/paint2.jpg" data-lightbox="watercolor" data-title="Watercolor 2"><img src="images/paint2.jpg" alt="Watercolor 2"><div class="hover-text">Watercolor 2 - 9x12"</div></a></div>
+  </div>
 
-  <section class="gallery-section" id="woodburning">
-    <h2>Wood Burning</h2>
-    <div class="grid">
-      <img src="images/wood1.png" alt="Wood 1">
-      <img src="images/wood2.jpg" alt="Wood 2">
-    </div>
-  </section>
+  <h3>Canvas</h3>
+  <div class="grid" id="canvas-gallery">
+    <div class="grid-item"><a href="images/canvas1.jpg" data-lightbox="canvas" data-title="Canvas 1"><img src="images/canvas1.jpg" alt="Canvas 1"><div class="hover-text">Canvas 1 - 16x20"</div></a></div>
+    <div class="grid-item"><a href="images/canvas2.jpg" data-lightbox="canvas" data-title="Canvas 2"><img src="images/canvas2.jpg" alt="Canvas 2"><div class="hover-text">Canvas 2 - 12x16"</div></a></div>
+  </div>
+  <button class="load-more" onclick="loadMore('paintings')">Show more</button>
+</section>
 
-  <footer id="contact">
-    <h2>Contact</h2>
-    <p>If you're interested in any piece, send an email to: <strong>artofsyd@gmail.com</strong></p>
-  </footer>
+<section class="gallery-section" id="crafts">
+  <h2>Crafts</h2>
+  <div class="grid">
+    <div class="grid-item"><a href="images/craft1.jpg" data-lightbox="crafts" data-title="Craft 1"><img src="images/craft1.jpg" alt="Craft 1"><div class="hover-text">Craft 1</div></a></div>
+    <div class="grid-item"><a href="images/craft2.jpg" data-lightbox="crafts" data-title="Craft 2"><img src="images/craft2.jpg" alt="Craft 2"><div class="hover-text">Craft 2</div></a></div>
+  </div>
+</section>
+
+<section class="gallery-section" id="woodburning">
+  <h2>Wood Burning</h2>
+  <div class="grid">
+    <div class="grid-item"><a href="images/wood1.png" data-lightbox="wood" data-title="Wood 1"><img src="images/wood1.png" alt="Wood 1"><div class="hover-text">Wood 1</div></a></div>
+    <div class="grid-item"><a href="images/wood2.jpg" data-lightbox="wood" data-title="Wood 2"><img src="images/wood2.jpg" alt="Wood 2"><div class="hover-text">Wood 2</div></a></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <h2>Contact</h2>
+  <p>If you're interested in any piece, send an email to: <strong>artofsyd@gmail.com</strong></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
+<script>
+  function loadMore(section) {
+    alert('More items for ' + section + ' would load here. This can be expanded to dynamically add elements.');
+  }
+</script>
 
 </body>
 </html>
