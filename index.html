@@ -49,12 +49,42 @@
   <div class="grid" id="watercolor-gallery">
     <!-- Watercolor Images -->
     
-    <div class="grid-item"><a href="images/watercolorpencils/1855x2690_DSC00417.JPG" data-lightbox="watercolor" data-title="DSC00417"><img src="images/watercolorpencils/1855x2690_DSC00417.JPG" alt="DSC00417"><div class="hover-text">DSC00417 - 1855x2690</div></a></div>
-    <div class="grid-item"><a href="images/watercolorpencils/1871x2693_DSC00415.JPG" data-lightbox="watercolor" data-title="DSC00415"><img src="images/watercolorpencils/1871x2693_DSC00415.JPG" alt="DSC00415"><div class="hover-text">DSC00415 - 1871x2693</div></a></div>
-    <div class="grid-item"><a href="images/watercolorpencils/2175x2785_DSC00425.JPG" data-lightbox="watercolor" data-title="DSC00425"><img src="images/watercolorpencils/2175x2785_DSC00425.JPG" alt="DSC00425"><div class="hover-text">DSC00425 - 2175x2785</div></a></div>
-    <div class="grid-item"><a href="images/watercolorpencils/2178x2732_DSC00420.JPG" data-lightbox="watercolor" data-title="DSC00420"><img src="images/watercolorpencils/2178x2732_DSC00420.JPG" alt="DSC00420"><div class="hover-text">DSC00420 - 2178x2732</div></a></div>
-    <div class="grid-item"><a href="images/watercolorpencils/2178x2753_DSC00424.JPG" data-lightbox="watercolor" data-title="DSC00424"><img src="images/watercolorpencils/2178x2753_DSC00424.JPG" alt="DSC00424"><div class="hover-text">DSC00424 - 2178x2753</div></a></div>
-    <!-- Remaining watercolor images should follow the same format -->
+    <!-- BEGIN AUTO GENERATED -->
+    <!-- The following 45 images are dynamically rendered -->
+    <script>
+      const watercolorImages = [
+        "1855x2690_DSC00417.JPG", "1871x2693_DSC00415.JPG", "2175x2785_DSC00425.JPG",
+        "2178x2732_DSC00420.JPG", "2178x2753_DSC00424.JPG", "2178x2754_DSC00418.JPG",
+        "2180x2784_DSC00427.JPG", "2183x2762_DSC00423.JPG", "2190x2708_DSC00426.JPG",
+        "2199x2727_DSC00419.JPG", "2202x2787_DSC00422.JPG", "2207x2716_DSC00421.JPG",
+        "2483x2386_DSC00413.JPG", "2490x2368_DSC00405.JPG", "2495x2386_DSC00409.JPG",
+        "2498x2374_DSC00414.JPG", "2498x2378_DSC00411.JPG", "2498x2389_DSC00410.JPG",
+        "2502x3223_DSC00442.JPG", "2503x2384_DSC00406.JPG", "2505x2385_DSC00408.JPG",
+        "2505x3232_DSC00437.JPG", "2506x2373_DSC00416.JPG", "2506x2385_DSC00407.JPG",
+        "2506x3227_DSC00436.JPG", "2507x3230_DSC00444.JPG", "2507x3232_DSC00433.JPG",
+        "2507x3237_DSC00434.JPG", "2508x3227_DSC00438.JPG", "2508x3235_DSC00439.JPG",
+        "2509x3222_DSC00441.JPG", "2510x3222_DSC00443.JPG", "2510x3235_DSC00432.JPG",
+        "2510x3240_DSC00431.JPG", "2511x2380_DSC00412.JPG", "2511x3222_DSC00440.JPG",
+        "2512x3228_DSC00445.JPG", "2515x3240_DSC00430.JPG", "2518x3237_DSC00435.JPG",
+        "2551x2504_DSC00402.JPG", "2731x2611_DSC00403.JPG", "2946x2302_DSC00428.JPG",
+        "3227x2497_DSC00429.JPG"
+      ];
+
+      const container = document.currentScript.parentElement;
+      watercolorImages.forEach(filename => {
+        const [dimensions, namePart] = filename.split("_");
+        const alt = namePart.replace(".JPG", "");
+        const img = document.createElement("div");
+        img.className = "grid-item";
+        img.innerHTML = `
+          <a href="images/watercolorpencils/${filename}" data-lightbox="watercolor" data-title="${alt}">
+            <img src="images/watercolorpencils/${filename}" alt="${alt}">
+            <div class="hover-text">${alt} - ${dimensions}</div>
+          </a>`;
+        container.appendChild(img);
+      });
+    </script>
+    <!-- END AUTO GENERATED -->
   </div>
 
   <h3>Canvas</h3>
