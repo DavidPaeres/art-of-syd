@@ -178,6 +178,7 @@ def build_html(model):
 <header>
   <h1>Art made by Sydney</h1>
   <p class="subtitle">Welcome to my trippy world.</p>
+  <a class="button" href="about.html">About Me</a>
   <a class="button" href="#contact">Contact</a>
   <nav>
     <a href="#paintings">Paintings</a>
