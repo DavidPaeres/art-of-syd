@@ -1,4 +1,4 @@
-filename,title,category,subcategory,alt_text,publish,sort_order,notes
+filename,title,categoria,subcategoria,alt_text,publish,sort_order,notes
 DSC00402.JPG,,P,watercolorpencils,,yes,,
 DSC00403.JPG,,P,watercolorpencils,,yes,,
 DSC00404.JPG,,P,watercolorpencils,,no,,copy of DSC00403
@@ -155,3 +155,7 @@ DSC00554.JPG,,,,,no,,
 DSC00555.JPG,,,,,no,,
 DSC00556.JPG,,,,,no,,
 DSC00557.JPG,,,,,no,,
+craft1.jpg,,C,crafts,,yes,,
+craft2.jpg,,C,crafts,,yes,,
+wood1.png,,W,woodburnings,,yes,,
+wood2.jpg,,W,woodburnings,,yes,,
