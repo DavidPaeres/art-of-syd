@@ -109,6 +109,12 @@ def read_manifest(csv_path: Path):
         "woodburnings": woodburnings
     }
 
+# Diccionario de títulos amigables para subcategorías
+SUBCATEGORY_TITLES = {
+    "watercolorpencils": "Watercolors & Colorpencils",
+    "canvas": "Canvases",
+}
+
 def build_html(model):
     """
     Construye el HTML final con:
@@ -175,7 +181,8 @@ def build_html(model):
     parts.append('  <h2>Paintings</h2>')
     for subcat, files in model["paintings"].items():
         sub_id = slugify(f"paintings-{subcat}")
-        parts.append(f'  <h3 id="{sub_id}">{subcat}</h3>')
+        display_name = SUBCATEGORY_TITLES.get(subcat.lower(), subcat.capitalize())
+        parts.append(f'  <h3 id="{sub_id}">{display_name}</h3>')
         parts.append('  <div class="grid">')
         for f in files:
             alt = Path(f).stem
@@ -226,7 +233,7 @@ def build_html(model):
     footer = """
 <footer id="contact">
   <h2>Contact</h2>
-  <p>If you're interested in any piece, send an email to: <strong>artofsyd@gmail.com</strong></p>
+  <p>If you're interested in any piece, send an email to: <strong>sydney25th@gmail.com</strong></p>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
 </body>
