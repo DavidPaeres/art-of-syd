@@ -19,6 +19,10 @@ Reglas de rutas:
 - C (Crafts):         images/crafts/<filename>
 - W (Woodburnings):   images/woodburnings/<filename>
 
+Columna opcional:
+- title -> si existe, se usa para el texto del hover y el data-title del lightbox.
+  Si no existe o viene vacío, se usa el nombre de archivo sin extensión.
+
 Salida:
 - Escribe index.html JUNTO AL SCRIPT (TOOLS/index.html)
 - Imprime la ruta absoluta donde se guardó
@@ -44,9 +48,9 @@ def read_manifest(csv_path: Path):
     """
     Lee el CSV y devuelve un modelo de datos:
     {
-      "paintings": OrderedDict({ subcat: [filename, ...], ... }),
-      "crafts": [filename, ...],
-      "woodburnings": [filename, ...]
+      "paintings": OrderedDict({ subcat: [ {"filename":..., "title":...}, ...], ... }),
+      "crafts": [{"filename":..., "title":...}, ...],
+      "woodburnings": [{"filename":..., "title":...}, ...]
     }
 
     Pasos:
@@ -60,7 +64,7 @@ def read_manifest(csv_path: Path):
         print(f"❌ No se encontró el manifest: {csv_path}")
         sys.exit(1)
 
-    paintings = OrderedDict()  # subcat -> [filenames]
+    paintings = OrderedDict()  # subcat -> [items]
     crafts = []
     woodburnings = []
 
@@ -75,6 +79,8 @@ def read_manifest(csv_path: Path):
             print(f"❌ Faltan columnas requeridas: {missing}")
             sys.exit(1)
 
+        has_title_col = "title" in (reader.fieldnames or [])
+
         for row in reader:
             # 1) Filtro publish == "no"
             if (row.get("publish") or "").strip().lower() == "no":
@@ -83,10 +89,13 @@ def read_manifest(csv_path: Path):
             filename = (row.get("filename") or "").strip()
             cat_code = (row.get("categoria") or "").strip().upper()  # MAYÚSCULA
             subcat   = (row.get("subcategoria") or "").strip()
+            title    = (row.get("title") or "").strip() if has_title_col else ""
 
             if not filename or cat_code not in CATEGORY_MAP:
                 # Si falta filename o la categoría no es P/C/W, saltamos
                 continue
+
+            item = {"filename": filename, "title": title}
 
             if cat_code == "P":
                 # Paintings: subcategoría define la carpeta dentro de images/
@@ -95,13 +104,13 @@ def read_manifest(csv_path: Path):
                 sub_key_folder = sub_key.lower()
                 if sub_key_folder not in paintings:
                     paintings[sub_key_folder] = []
-                paintings[sub_key_folder].append(filename)
+                paintings[sub_key_folder].append(item)
 
             elif cat_code == "C":
-                crafts.append(filename)
+                crafts.append(item)
 
             elif cat_code == "W":
-                woodburnings.append(filename)
+                woodburnings.append(item)
 
     return {
         "paintings": paintings,
@@ -114,6 +123,12 @@ SUBCATEGORY_TITLES = {
     "watercolorpencils": "Watercolors & Colorpencils",
     "canvas": "Canvases",
 }
+
+def _item_title_or_fallback(item):
+    """Devuelve el título visible para hover/lightbox, con fallback al stem del filename."""
+    if item.get("title"):
+        return item["title"]
+    return Path(item["filename"]).stem
 
 def build_html(model):
     """
@@ -179,18 +194,19 @@ def build_html(model):
     # ===== Paintings (con subcategorías) =====
     parts.append('<section class="gallery-section" id="paintings">')
     parts.append('  <h2>Paintings</h2>')
-    for subcat, files in model["paintings"].items():
+    for subcat, items in model["paintings"].items():
         sub_id = slugify(f"paintings-{subcat}")
         display_name = SUBCATEGORY_TITLES.get(subcat.lower(), subcat.capitalize())
         parts.append(f'  <h3 id="{sub_id}">{display_name}</h3>')
         parts.append('  <div class="grid">')
-        for f in files:
-            alt = Path(f).stem
+        for item in items:
+            f = item["filename"]
+            title = _item_title_or_fallback(item)
             src = f"images/{subcat}/{f}"
             parts.append('    <div class="grid-item">')
-            parts.append(f'      <a href="{src}" data-lightbox="{subcat}" data-title="{alt}">')
-            parts.append(f'        <img src="{src}" alt="{alt}">')
-            parts.append(f'        <div class="hover-text">{alt}</div>')
+            parts.append(f'      <a href="{src}" data-lightbox="{subcat}" data-title="{title}">')
+            parts.append(f'        <img src="{src}" alt="{title}">')
+            parts.append(f'        <div class="hover-text">{title}</div>')
             parts.append('      </a>')
             parts.append('    </div>')
         parts.append('  </div>')
@@ -200,13 +216,14 @@ def build_html(model):
     parts.append('<section class="gallery-section" id="crafts">')
     parts.append('  <h2>Crafts</h2>')
     parts.append('  <div class="grid">')
-    for f in model["crafts"]:
-        alt = Path(f).stem
+    for item in model["crafts"]:
+        f = item["filename"]
+        title = _item_title_or_fallback(item)
         src = f"images/crafts/{f}"
         parts.append('    <div class="grid-item">')
-        parts.append(f'      <a href="{src}" data-lightbox="crafts" data-title="{alt}">')
-        parts.append(f'        <img src="{src}" alt="{alt}">')
-        parts.append(f'        <div class="hover-text">{alt}</div>')
+        parts.append(f'      <a href="{src}" data-lightbox="crafts" data-title="{title}">')
+        parts.append(f'        <img src="{src}" alt="{title}">')
+        parts.append(f'        <div class="hover-text">{title}</div>')
         parts.append('      </a>')
         parts.append('    </div>')
     parts.append('  </div>')
@@ -216,13 +233,14 @@ def build_html(model):
     parts.append('<section class="gallery-section" id="woodburnings">')
     parts.append('  <h2>Woodburnings</h2>')
     parts.append('  <div class="grid">')
-    for f in model["woodburnings"]:
-        alt = Path(f).stem
+    for item in model["woodburnings"]:
+        f = item["filename"]
+        title = _item_title_or_fallback(item)
         src = f"images/woodburnings/{f}"
         parts.append('    <div class="grid-item">')
-        parts.append(f'      <a href="{src}" data-lightbox="woodburnings" data-title="{alt}">')
-        parts.append(f'        <img src="{src}" alt="{alt}">')
-        parts.append(f'        <div class="hover-text">{alt}</div>')
+        parts.append(f'      <a href="{src}" data-lightbox="woodburnings" data-title="{title}">')
+        parts.append(f'        <img src="{src}" alt="{title}">')
+        parts.append(f'        <div class="hover-text">{title}</div>')
         parts.append('      </a>')
         parts.append('    </div>')
     parts.append('  </div>')
