@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+import argparse
 
 points = []
 
@@ -9,6 +10,11 @@ def click_event(event, x, y, flags, param):
         points.append((x, y))
         cv2.circle(img, (x, y), 5, (0, 255, 0), -1)
         cv2.imshow("Selecciona 4 esquinas", img)
+
+# Argumentos de línea de comandos
+parser = argparse.ArgumentParser(description="Recorte manual con opción de prefijo de tamaño")
+parser.add_argument("--prefix-size", action="store_true", help="Añadir prefijo widthxheight_ al nombre")
+args = parser.parse_args()
 
 # Nombres de directorios para imagenes originales y recortadas
 input_folder = "imagenes_originales"
@@ -66,9 +72,13 @@ for filename in image_files:
     M = cv2.getPerspectiveTransform(pts_src, pts_dst)
     warped = cv2.warpPerspective(clone, M, (width, height))
 
-    # Generando prefijo del nombre de la imagen
+    # Generando nombre de salida
     name, ext = os.path.splitext(filename)
-    output_filename = f"{width}x{height}_{name}{ext}"
+    if args.prefix_size:
+        output_filename = f"{width}x{height}_{name}{ext}"
+    else:
+        output_filename = f"{name}{ext}"
+    
     output_path = os.path.join(output_folder, output_filename)
 
     # Guardar recorte
