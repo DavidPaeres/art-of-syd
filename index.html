@@ -32,6 +32,12 @@
     .load-more { display: block; margin: 20px auto; padding: 10px 20px; background: #ff69b4; color: white; border: none; border-radius: 5px; cursor: pointer; }
     footer { text-align: center; padding: 20px; background: #222; margin-top: 40px; }
     a.button { display: inline-block; padding: 10px 20px; background: #ff69b4; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px; }
+    @media (max-width: 900px) {
+      .grid-item { width: calc(50% - 20px); }
+    }
+    @media (max-width: 600px) {
+      .grid-item { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -70,17 +76,18 @@
         "DSC00429.jpg"
       ];
 
-      const container = document.currentScript.parentElement;
+      // Inserta dinámicamente cada tarjeta en el contenedor correcto:
+      const container = document.getElementById('watercolor-gallery');
       watercolorImages.forEach(filename => {
         const alt = filename.replace(".jpg", "");
-        const img = document.createElement("div");
-        img.className = "grid-item";
-        img.innerHTML = `
+        const wrapper = document.createElement("div");
+        wrapper.className = "grid-item";
+        wrapper.innerHTML = `
           <a href="images/watercolorpencils/${filename}" data-lightbox="watercolor" data-title="${alt}">
             <img src="images/watercolorpencils/${filename}" alt="${alt}">
-            <div class="hover-text">${alt} - ${dimensions}</div>
+            <div class="hover-text">${alt}</div>
           </a>`;
-        container.appendChild(img);
+        container.appendChild(wrapper);
       });
     </script>
     <!-- END AUTO GENERATED -->
@@ -88,24 +95,54 @@
 
   <h3>Canvas</h3>
   <div class="grid" id="canvas-gallery">
-    <div class="grid-item"><a href="images/canvas/DSC00446.jpg" data-lightbox="canvas" data-title="DSC00446"><img src="images/canvas/DSC00446.jpg" alt="DSC00446"><div class="hover-text">DSC00446</div>
-    <div class="grid-item"><a href="images/canvas/DSC00447.jpg" data-lightbox="canvas" data-title="DSC00447"><img src="images/canvas/DSC00447.jpg" alt="DSC00447"><div class="hover-text">DSC00447</div>
+    <div class="grid-item">
+      <a href="images/canvas/DSC00446.jpg" data-lightbox="canvas" data-title="DSC00446">
+        <img src="images/canvas/DSC00446.jpg" alt="DSC00446">
+        <div class="hover-text">DSC00446</div>
+      </a>
+    </div>
+    <div class="grid-item">
+      <a href="images/canvas/DSC00447.jpg" data-lightbox="canvas" data-title="DSC00447">
+        <img src="images/canvas/DSC00447.jpg" alt="DSC00447">
+        <div class="hover-text">DSC00447</div>
+      </a>
+    </div>
   </div>
 </section>
 
 <section class="gallery-section" id="crafts">
   <h2>Crafts</h2>
   <div class="grid">
-    <div class="grid-item"><a href="images/craft1.jpg" data-lightbox="crafts" data-title="Craft 1"><img src="images/craft1.jpg" alt="Craft 1"><div class="hover-text">Craft 1</div></a></div>
-    <div class="grid-item"><a href="images/craft2.jpg" data-lightbox="crafts" data-title="Craft 2"><img src="images/craft2.jpg" alt="Craft 2"><div class="hover-text">Craft 2</div></a></div>
+    <div class="grid-item">
+      <a href="images/craft1.jpg" data-lightbox="crafts" data-title="Craft 1">
+        <img src="images/craft1.jpg" alt="Craft 1">
+        <div class="hover-text">Craft 1</div>
+      </a>
+    </div>
+    <div class="grid-item">
+      <a href="images/craft2.jpg" data-lightbox="crafts" data-title="Craft 2">
+        <img src="images/craft2.jpg" alt="Craft 2">
+        <div class="hover-text">Craft 2</div>
+      </a>
+    </div>
   </div>
 </section>
 
 <section class="gallery-section" id="woodburning">
   <h2>Wood Burning</h2>
   <div class="grid">
-    <div class="grid-item"><a href="images/wood1.png" data-lightbox="wood" data-title="Wood 1"><img src="images/wood1.png" alt="Wood 1"><div class="hover-text">Wood 1</div></a></div>
-    <div class="grid-item"><a href="images/wood2.jpg" data-lightbox="wood" data-title="Wood 2"><img src="images/wood2.jpg" alt="Wood 2"><div class="hover-text">Wood 2</div></a></div>
+    <div class="grid-item">
+      <a href="images/wood1.png" data-lightbox="wood" data-title="Wood 1">
+        <img src="images/wood1.png" alt="Wood 1">
+        <div class="hover-text">Wood 1</div>
+      </a>
+    </div>
+    <div class="grid-item">
+      <a href="images/wood2.jpg" data-lightbox="wood" data-title="Wood 2">
+        <img src="images/wood2.jpg" alt="Wood 2">
+        <div class="hover-text">Wood 2</div>
+      </a>
+    </div>
   </div>
 </section>
 
