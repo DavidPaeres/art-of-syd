@@ -309,6 +309,8 @@ def build_html(model) -> str:
     }
     .side-switch button.active{ background:var(--accent); border-color:transparent; color:#000; font-weight:700 }
     .side-switch .lbl{ font-size:0.75rem; color:var(--muted); text-align:center; margin-bottom:4px }
+    .side-switch .arrow{ font-size:1.35rem; line-height:1; display:inline-block; }
+
 
     /* ===== Layout principal ===== */
     main{ max-width:var(--maxw); margin:0 auto; padding: 20px 16px 24px 16px; }
@@ -384,7 +386,7 @@ def build_html(model) -> str:
     /* Responsive */
     @media (max-width: 900px){ .grid-item{width:calc(50% - 9px)} }
     @media (max-width: 640px){
-      .side-switch{ right:10px; top:auto; bottom:16px; transform:none; font-size:1.4rem }
+      .side-switch{ right:10px; top:auto; bottom:16px; transform:none; flex-direction:column; font-size:1.4rem }
       .nav a{ height:36px; padding:0 12px; font-size:0.9rem }
       .h-item{ width:240px }
       .hero h1{font-size:1.7rem}
@@ -422,8 +424,8 @@ def build_html(model) -> str:
   <!-- ===== Switch lateral (pequeño) ===== -->
   <aside class="side-switch" aria-label="View mode switch">
     <div class="lbl">Scroll type</div>
-    <button id="btnModeA" class="active" title="Vertical">&#x2195;&#xFE0E;</button>  <!-- ↕︎ -->
-    <button id="btnModeB" title="Horizontal">&#x2194;&#xFE0E;</button>               <!-- ↔︎ -->
+    <button id="btnModeA" class="active" title="Vertical"><span class="arrow">&#x2195;&#xFE0E;</span></button>  <!-- ↕︎ -->
+    <button id="btnModeB" title="Horizontal"><span class="arrow">&#x2194;&#xFE0E;</span></button>               <!-- ↔︎ -->
   </aside>
 
   <main>
