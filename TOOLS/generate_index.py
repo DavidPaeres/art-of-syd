@@ -421,8 +421,8 @@ def build_html(model) -> str:
   <!-- ===== Switch lateral (pequeño) ===== -->
   <aside class="side-switch" aria-label="View mode switch">
     <div class="lbl">Scroll type</div>
-    <button id="btnModeA" class="active" title="Vertical">&#8597;&#65039;</button>  <!-- ↕️ -->->
-    <button id="btnModeB" title="Horizontal">&#8596;&#65039;</button>               <!-- ↔️ -->
+    <button id="btnModeA" class="active" title="Vertical">&#x2195;&#xFE0E;</button>  <!-- ↕︎ -->
+    <button id="btnModeB" title="Horizontal">&#x2194;&#xFE0E;</button>               <!-- ↔︎ -->
   </aside>
 
   <main>
