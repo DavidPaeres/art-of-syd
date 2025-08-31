@@ -303,8 +303,9 @@ def build_html(model) -> str:
     }
     .side-switch button{
       border:1px solid var(--line); background:#222; color:#fff;
-      font-size:0.85rem; padding:6px 10px; border-radius:10px; cursor:pointer;
-      min-width:42px;
+      font-size:1.25rem; line-height:1;
+      padding:6px 10px; border-radius:10px; cursor:pointer;
+      min-width:46px;
     }
     .side-switch button.active{ background:var(--accent); border-color:transparent; color:#000; font-weight:700 }
     .side-switch .lbl{ font-size:0.75rem; color:var(--muted); text-align:center; margin-bottom:4px }
@@ -383,7 +384,7 @@ def build_html(model) -> str:
     /* Responsive */
     @media (max-width: 900px){ .grid-item{width:calc(50% - 9px)} }
     @media (max-width: 640px){
-      .side-switch{ right:10px; top:auto; bottom:16px; transform:none; flex-direction:row }
+      .side-switch{ right:10px; top:auto; bottom:16px; transform:none; font-size:1.4rem }
       .nav a{ height:36px; padding:0 12px; font-size:0.9rem }
       .h-item{ width:240px }
       .hero h1{font-size:1.7rem}
