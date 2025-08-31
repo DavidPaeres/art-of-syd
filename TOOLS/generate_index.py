@@ -387,6 +387,13 @@ def build_html(model) -> str:
       .nav a{ height:36px; padding:0 12px; font-size:0.9rem }
       .h-item{ width:240px }
       .hero h1{font-size:1.7rem}
+
+      /* Evitar zoom al enfocar inputs en iOS */
+      input, textarea, select,
+      .searchbar-global input{
+        font-size:16px;
+        line-height:1.2;
+      }
     }
     @media (max-width: 480px){ .grid-item{width:100%} }
   </style>
@@ -413,9 +420,9 @@ def build_html(model) -> str:
 
   <!-- ===== Switch lateral (pequeño) ===== -->
   <aside class="side-switch" aria-label="View mode switch">
-    <div class="lbl">Mode</div>
-    <button id="btnModeA" class="active" title="Vertical">A</button>
-    <button id="btnModeB" title="Horizontal">B</button>
+    <div class="lbl">Scroll type</div>
+    <button id="btnModeA" class="active" title="Vertical">&#8597;</button>   <!-- ↕ -->
+    <button id="btnModeB" title="Horizontal">&#8596;</button>                <!-- ↔ -->
   </aside>
 
   <main>
