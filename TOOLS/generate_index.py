@@ -112,12 +112,11 @@ def build_nav_and_sections(data: OrderedDict):
         section_parts.append(f"""
       <!-- ===== {cat.upper()} ===== -->
       <section class="section" id="{sid}">
-        <h2>{_e(cat)}</h2>
 
         <!-- Mode A -->
         <div class="modeA">
-          <details open>
-            <summary aria-label="Toggle {_e(cat)}"><h3>Gallery</h3></summary>
+          <details>
+            <summary aria-label="Toggle {_e(cat)}"><h2>{_e(cat)}</h2></summary>
             <div class="panel">
               <div class="grid" id="{grid_id}"{limit}>
 {grid_html}
@@ -130,7 +129,7 @@ def build_nav_and_sections(data: OrderedDict):
         <div class="modeB">
           <div class="row">
             <div class="row-head">
-              <h3>{_e(cat)}</h3>
+              <h2>{_e(cat)}</h2>
               <div class="row-ctrls">
                 <button class="button secondary" data-scroll="#{strip_id}" data-dir="left">&#x27F5;</button>
                 <button class="button secondary" data-scroll="#{strip_id}" data-dir="right">&#x27F6;</button>
@@ -218,7 +217,6 @@ def build_html(data: OrderedDict) -> str:
 
     main{max-width:var(--maxw);margin:0 auto;padding:20px 16px 24px}
     .section{padding:28px 0;border-bottom:1px solid var(--line)}
-    .section h2{margin:0 0 8px;border-bottom:1px solid #444;padding-bottom:10px}
 
     .button{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;text-decoration:none;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
     .button.secondary{background:transparent;color:#fff;border:1px solid var(--line)}
@@ -229,7 +227,7 @@ def build_html(data: OrderedDict) -> str:
     details{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2);margin-top:16px;overflow:hidden}
     summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px}
     summary::-webkit-details-marker{display:none}
-    summary h3{margin:0;color:var(--accent)}
+    summary h2{margin:0;font-size:1.4rem;color:var(--accent)}
     summary::after{content:"▾";color:#fff;margin-left:auto;transition:transform .2s ease;font-size:1.1rem}
     details[open] summary::after{transform:rotate(-180deg)}
     .panel{padding:10px 12px 16px;border-top:1px solid var(--line)}
@@ -237,7 +235,7 @@ def build_html(data: OrderedDict) -> str:
     .grid{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
     .grid-item{position:relative;width:calc(33.333% - 12px)}
     .grid img{width:100%;height:auto;border-radius:10px;cursor:pointer;display:block}
-    .hover-text{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;background:rgba(0,0,0,.7);border-radius:0 0 10px 10px;opacity:0;transition:opacity .25s}
+    .hover-text{position:absolute;left:0;right:0;bottom:0;padding:20px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,0.88));border-radius:0 0 10px 10px;opacity:0;transition:opacity .3s ease;font-size:0.88rem;font-style:italic;font-weight:500;color:var(--accent);text-align:center;letter-spacing:0.03em}
     .grid-item:hover .hover-text,.h-item:hover .hover-text{opacity:1}
 
     .grid[data-limit] .grid-item{display:none}
@@ -246,11 +244,10 @@ def build_html(data: OrderedDict) -> str:
 
     .row{margin-top:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
     .row-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
-    .row-head h3{margin:0;color:var(--accent)}
+    .row-head h2{margin:0;font-size:1.4rem;color:var(--accent)}
     .strip{display:flex;gap:14px;overflow-x:auto;padding:14px;scroll-snap-type:x mandatory}
     .h-item{flex:0 0 auto;scroll-snap-align:start;width:280px;position:relative}
     .h-item img{width:100%;height:auto;border-radius:10px;display:block;cursor:pointer}
-    .h-item .hover-text{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;background:rgba(0,0,0,.7);border-radius:0 0 10px 10px;opacity:0;transition:opacity .25s}
     .row-ctrls{display:flex;gap:8px}
     .row-ctrls .button{padding:6px 10px;background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;cursor:pointer}
 
