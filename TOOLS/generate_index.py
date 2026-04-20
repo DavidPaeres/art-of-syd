@@ -110,34 +110,27 @@ def build_nav_and_sections(data: OrderedDict):
         nav_parts.append(f'      <a href="#{sid}">{_e(cat)}</a>')
 
         section_parts.append(f"""
-      <!-- ===== {cat.upper()} ===== -->
       <section class="section" id="{sid}">
-
-        <!-- Mode A -->
-        <div class="modeA">
-          <details>
-            <summary aria-label="Toggle {_e(cat)}"><h2>{_e(cat)}</h2></summary>
-            <div class="panel">
-              <div class="grid" id="{grid_id}"{limit}>
-{grid_html}
-              </div>
-{btn_more}            </div>
-          </details>
+        <div class="cat-header" data-panel="panel-{sid}">
+          <h2>{_e(cat)}</h2>
+          <button class="cat-chevron modeA-ctrl" aria-label="Toggle {_e(cat)}">&#x25BE;</button>
+          <div class="scroll-ctrls modeB-ctrl">
+            <button data-scroll="#{strip_id}" data-dir="left">&#x27F5;</button>
+            <button data-scroll="#{strip_id}" data-dir="right">&#x27F6;</button>
+          </div>
         </div>
 
-        <!-- Mode B -->
+        <div class="modeA">
+          <div class="cat-panel collapsed" id="panel-{sid}">
+            <div class="grid" id="{grid_id}"{limit}>
+{grid_html}
+            </div>
+{btn_more}          </div>
+        </div>
+
         <div class="modeB">
-          <div class="row">
-            <div class="row-head">
-              <h2>{_e(cat)}</h2>
-              <div class="row-ctrls">
-                <button class="button secondary" data-scroll="#{strip_id}" data-dir="left">&#x27F5;</button>
-                <button class="button secondary" data-scroll="#{strip_id}" data-dir="right">&#x27F6;</button>
-              </div>
-            </div>
-            <div class="strip" id="{strip_id}">
+          <div class="strip" id="{strip_id}">
 {strip_html}
-            </div>
           </div>
         </div>
       </section>""")
@@ -216,7 +209,7 @@ def build_html(data: OrderedDict) -> str:
     .side-switch .arrow{font-size:1.35rem;line-height:1;display:inline-block}
 
     main{max-width:var(--maxw);margin:0 auto;padding:20px 16px 24px}
-    .section{padding:28px 0;border-bottom:1px solid var(--line)}
+    .section{padding:24px 0;border-bottom:1px solid var(--line)}
 
     .button{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;text-decoration:none;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
     .button.secondary{background:transparent;color:#fff;border:1px solid var(--line)}
@@ -224,13 +217,21 @@ def build_html(data: OrderedDict) -> str:
     .searchbar-global{display:flex;justify-content:center;margin:8px 0 18px}
     .searchbar-global input{width:100%;max-width:540px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#141414;color:#fff}
 
-    details{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2);margin-top:16px;overflow:hidden}
-    summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px}
-    summary::-webkit-details-marker{display:none}
-    summary h2{margin:0;font-size:1.4rem;color:var(--accent)}
-    summary::after{content:"▾";color:#fff;margin-left:auto;transition:transform .2s ease;font-size:1.1rem}
-    details[open] summary::after{transform:rotate(-180deg)}
-    .panel{padding:10px 12px 16px;border-top:1px solid var(--line)}
+    .cat-header{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #444;cursor:pointer}
+    .cat-header h2{margin:0;font-size:1.5rem;color:var(--ink);flex:1}
+    .cat-chevron{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px 6px;transition:transform .2s ease;line-height:1}
+    .cat-header.open .cat-chevron{transform:rotate(-180deg)}
+    .scroll-ctrls{display:flex;gap:8px}
+    .scroll-ctrls button{background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:1rem}
+    .scroll-ctrls button:hover{border-color:#555}
+    body[data-mode="A"] .modeA-ctrl{display:inline-flex}
+    body[data-mode="A"] .modeB-ctrl{display:none}
+    body[data-mode="B"] .modeA-ctrl{display:none}
+    body[data-mode="B"] .modeB-ctrl{display:flex}
+
+    .cat-panel{margin-top:14px}
+    .cat-panel.collapsed{display:none}
+    .showmore-wrap{margin-top:10px;display:flex;justify-content:center}
 
     .grid{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
     .grid-item{position:relative;width:calc(33.333% - 12px)}
@@ -240,16 +241,10 @@ def build_html(data: OrderedDict) -> str:
 
     .grid[data-limit] .grid-item{display:none}
     .grid[data-limit] .grid-item:nth-child(-n+""" + str(SHOW_MORE_LIMIT) + """){display:block}
-    .showmore-wrap{margin-top:10px;display:flex;justify-content:center}
 
-    .row{margin-top:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
-    .row-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
-    .row-head h2{margin:0;font-size:1.4rem;color:var(--accent)}
-    .strip{display:flex;gap:14px;overflow-x:auto;padding:14px;scroll-snap-type:x mandatory}
+    .strip{display:flex;gap:14px;overflow-x:auto;padding:14px 0;scroll-snap-type:x mandatory}
     .h-item{flex:0 0 auto;scroll-snap-align:start;width:280px;position:relative}
     .h-item img{width:100%;height:auto;border-radius:10px;display:block;cursor:pointer}
-    .row-ctrls{display:flex;gap:8px}
-    .row-ctrls .button{padding:6px 10px;background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;cursor:pointer}
 
     body[data-mode="A"] .modeA{display:block}
     body[data-mode="A"] .modeB{display:none}
@@ -350,15 +345,26 @@ def build_html(data: OrderedDict) -> str:
         });
 
         if (searching) {
-          document.querySelectorAll('.modeA details').forEach(d => {
-            if (Array.from(d.querySelectorAll('.grid-item')).some(c => c.style.display !== 'none')) d.open = true;
-          });
+          document.querySelectorAll('.cat-panel.collapsed').forEach(p => p.classList.remove('collapsed'));
         }
       });
     }
 
 %%SHOWMORE_JS%%
 
+    // Toggle panels in Mode A
+    document.querySelectorAll('.cat-header').forEach(hdr => {
+      hdr.addEventListener('click', e => {
+        if (e.target.closest('.scroll-ctrls')) return;
+        if (document.body.dataset.mode !== 'A') return;
+        const panel = document.getElementById(hdr.dataset.panel);
+        if (!panel) return;
+        panel.classList.toggle('collapsed');
+        hdr.classList.toggle('open');
+      });
+    });
+
+    // Scroll buttons (Mode B)
     document.querySelectorAll('[data-scroll]').forEach(btn => {
       btn.addEventListener('click', () => {
         const el = document.querySelector(btn.getAttribute('data-scroll'));

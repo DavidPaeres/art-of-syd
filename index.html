@@ -32,7 +32,7 @@
     .side-switch .arrow{font-size:1.35rem;line-height:1;display:inline-block}
 
     main{max-width:var(--maxw);margin:0 auto;padding:20px 16px 24px}
-    .section{padding:28px 0;border-bottom:1px solid var(--line)}
+    .section{padding:24px 0;border-bottom:1px solid var(--line)}
 
     .button{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;text-decoration:none;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
     .button.secondary{background:transparent;color:#fff;border:1px solid var(--line)}
@@ -40,13 +40,21 @@
     .searchbar-global{display:flex;justify-content:center;margin:8px 0 18px}
     .searchbar-global input{width:100%;max-width:540px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#141414;color:#fff}
 
-    details{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2);margin-top:16px;overflow:hidden}
-    summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px}
-    summary::-webkit-details-marker{display:none}
-    summary h2{margin:0;font-size:1.4rem;color:var(--accent)}
-    summary::after{content:"▾";color:#fff;margin-left:auto;transition:transform .2s ease;font-size:1.1rem}
-    details[open] summary::after{transform:rotate(-180deg)}
-    .panel{padding:10px 12px 16px;border-top:1px solid var(--line)}
+    .cat-header{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #444;cursor:pointer}
+    .cat-header h2{margin:0;font-size:1.5rem;color:var(--ink);flex:1}
+    .cat-chevron{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px 6px;transition:transform .2s ease;line-height:1}
+    .cat-header.open .cat-chevron{transform:rotate(-180deg)}
+    .scroll-ctrls{display:flex;gap:8px}
+    .scroll-ctrls button{background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:1rem}
+    .scroll-ctrls button:hover{border-color:#555}
+    body[data-mode="A"] .modeA-ctrl{display:inline-flex}
+    body[data-mode="A"] .modeB-ctrl{display:none}
+    body[data-mode="B"] .modeA-ctrl{display:none}
+    body[data-mode="B"] .modeB-ctrl{display:flex}
+
+    .cat-panel{margin-top:14px}
+    .cat-panel.collapsed{display:none}
+    .showmore-wrap{margin-top:10px;display:flex;justify-content:center}
 
     .grid{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
     .grid-item{position:relative;width:calc(33.333% - 12px)}
@@ -56,16 +64,10 @@
 
     .grid[data-limit] .grid-item{display:none}
     .grid[data-limit] .grid-item:nth-child(-n+12){display:block}
-    .showmore-wrap{margin-top:10px;display:flex;justify-content:center}
 
-    .row{margin-top:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
-    .row-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
-    .row-head h2{margin:0;font-size:1.4rem;color:var(--accent)}
-    .strip{display:flex;gap:14px;overflow-x:auto;padding:14px;scroll-snap-type:x mandatory}
+    .strip{display:flex;gap:14px;overflow-x:auto;padding:14px 0;scroll-snap-type:x mandatory}
     .h-item{flex:0 0 auto;scroll-snap-align:start;width:280px;position:relative}
     .h-item img{width:100%;height:auto;border-radius:10px;display:block;cursor:pointer}
-    .row-ctrls{display:flex;gap:8px}
-    .row-ctrls .button{padding:6px 10px;background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;cursor:pointer}
 
     body[data-mode="A"] .modeA{display:block}
     body[data-mode="A"] .modeB{display:none}
@@ -115,110 +117,56 @@
       <input id="searchGlobal" type="search" placeholder="Search all artworks..." aria-label="Search artworks" />
     </div>
 
-      <!-- ===== CANVASES ===== -->
       <section class="section" id="canvases">
-
-        <!-- Mode A -->
-        <div class="modeA">
-          <details>
-            <summary aria-label="Toggle Canvases"><h2>Canvases</h2></summary>
-            <div class="panel">
-              <div class="grid" id="grid-canvases">
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden">
-                    <img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden">
-                    <div class="hover-text">Flourescent Garden</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy">
-                    <img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy">
-                    <div class="hover-text">Whispers in the Canopy</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)">
-                    <img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo (SOLD)">
-                    <div class="hover-text">La Garita del Diablo (SOLD)</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery">
-                    <img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery">
-                    <div class="hover-text">Gatepass Cemetery</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon">
-                    <img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon">
-                    <div class="hover-text">Sedona Moon</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight">
-                    <img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight">
-                    <div class="hover-text">Shell of Sight</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness">
-                    <img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness">
-                    <div class="hover-text">Sunset Madness</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </details>
+        <div class="cat-header" data-panel="panel-canvases">
+          <h2>Canvases</h2>
+          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Canvases">&#x25BE;</button>
+          <div class="scroll-ctrls modeB-ctrl">
+            <button data-scroll="#strip-canvases" data-dir="left">&#x27F5;</button>
+            <button data-scroll="#strip-canvases" data-dir="right">&#x27F6;</button>
+          </div>
         </div>
 
-        <!-- Mode B -->
-        <div class="modeB">
-          <div class="row">
-            <div class="row-head">
-              <h2>Canvases</h2>
-              <div class="row-ctrls">
-                <button class="button secondary" data-scroll="#strip-canvases" data-dir="left">&#x27F5;</button>
-                <button class="button secondary" data-scroll="#strip-canvases" data-dir="right">&#x27F6;</button>
-              </div>
-            </div>
-            <div class="strip" id="strip-canvases">
-                <div class="h-item">
+        <div class="modeA">
+          <div class="cat-panel collapsed" id="panel-canvases">
+            <div class="grid" id="grid-canvases">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden">
                     <img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden">
                     <div class="hover-text">Flourescent Garden</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy">
                     <img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy">
                     <div class="hover-text">Whispers in the Canopy</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)">
                     <img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo (SOLD)">
                     <div class="hover-text">La Garita del Diablo (SOLD)</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery">
                     <img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery">
                     <div class="hover-text">Gatepass Cemetery</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon">
                     <img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon">
                     <div class="hover-text">Sedona Moon</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight">
                     <img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight">
                     <div class="hover-text">Shell of Sight</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness">
                     <img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness">
                     <div class="hover-text">Sunset Madness</div>
@@ -227,17 +175,68 @@
             </div>
           </div>
         </div>
+
+        <div class="modeB">
+          <div class="strip" id="strip-canvases">
+                <div class="h-item">
+                  <a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden">
+                    <img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden">
+                    <div class="hover-text">Flourescent Garden</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy">
+                    <img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy">
+                    <div class="hover-text">Whispers in the Canopy</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)">
+                    <img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo (SOLD)">
+                    <div class="hover-text">La Garita del Diablo (SOLD)</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery">
+                    <img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery">
+                    <div class="hover-text">Gatepass Cemetery</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon">
+                    <img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon">
+                    <div class="hover-text">Sedona Moon</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight">
+                    <img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight">
+                    <div class="hover-text">Shell of Sight</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness">
+                    <img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness">
+                    <div class="hover-text">Sunset Madness</div>
+                  </a>
+                </div>
+          </div>
+        </div>
       </section>
 
-      <!-- ===== WATERCOLORS ===== -->
       <section class="section" id="watercolors">
+        <div class="cat-header" data-panel="panel-watercolors">
+          <h2>Watercolors</h2>
+          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Watercolors">&#x25BE;</button>
+          <div class="scroll-ctrls modeB-ctrl">
+            <button data-scroll="#strip-watercolors" data-dir="left">&#x27F5;</button>
+            <button data-scroll="#strip-watercolors" data-dir="right">&#x27F6;</button>
+          </div>
+        </div>
 
-        <!-- Mode A -->
         <div class="modeA">
-          <details>
-            <summary aria-label="Toggle Watercolors"><h2>Watercolors</h2></summary>
-            <div class="panel">
-              <div class="grid" id="grid-watercolors" data-limit>
+          <div class="cat-panel collapsed" id="panel-watercolors">
+            <div class="grid" id="grid-watercolors" data-limit>
                 <div class="grid-item">
                   <a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch">
                     <img loading="lazy" src="images/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch">
@@ -394,25 +393,15 @@
                     <div class="hover-text">Tucancillo Verde</div>
                   </a>
                 </div>
-              </div>
+            </div>
               <div class="showmore-wrap">
                 <button id="btn-more-watercolors" class="button secondary">Show more</button>
               </div>
-            </div>
-          </details>
+          </div>
         </div>
 
-        <!-- Mode B -->
         <div class="modeB">
-          <div class="row">
-            <div class="row-head">
-              <h2>Watercolors</h2>
-              <div class="row-ctrls">
-                <button class="button secondary" data-scroll="#strip-watercolors" data-dir="left">&#x27F5;</button>
-                <button class="button secondary" data-scroll="#strip-watercolors" data-dir="right">&#x27F6;</button>
-              </div>
-            </div>
-            <div class="strip" id="strip-watercolors">
+          <div class="strip" id="strip-watercolors">
                 <div class="h-item">
                   <a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch">
                     <img loading="lazy" src="images/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch">
@@ -569,20 +558,23 @@
                     <div class="hover-text">Tucancillo Verde</div>
                   </a>
                 </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <!-- ===== COLORPENCILS ===== -->
       <section class="section" id="colorpencils">
+        <div class="cat-header" data-panel="panel-colorpencils">
+          <h2>Colorpencils</h2>
+          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Colorpencils">&#x25BE;</button>
+          <div class="scroll-ctrls modeB-ctrl">
+            <button data-scroll="#strip-colorpencils" data-dir="left">&#x27F5;</button>
+            <button data-scroll="#strip-colorpencils" data-dir="right">&#x27F6;</button>
+          </div>
+        </div>
 
-        <!-- Mode A -->
         <div class="modeA">
-          <details>
-            <summary aria-label="Toggle Colorpencils"><h2>Colorpencils</h2></summary>
-            <div class="panel">
-              <div class="grid" id="grid-colorpencils" data-limit>
+          <div class="cat-panel collapsed" id="panel-colorpencils">
+            <div class="grid" id="grid-colorpencils" data-limit>
                 <div class="grid-item">
                   <a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus">
                     <img loading="lazy" src="images/colorpencils/DSC00427.jpg" alt="Goku Nimbus">
@@ -691,25 +683,15 @@
                     <div class="hover-text">Prickly Pear Bloom</div>
                   </a>
                 </div>
-              </div>
+            </div>
               <div class="showmore-wrap">
                 <button id="btn-more-colorpencils" class="button secondary">Show more</button>
               </div>
-            </div>
-          </details>
+          </div>
         </div>
 
-        <!-- Mode B -->
         <div class="modeB">
-          <div class="row">
-            <div class="row-head">
-              <h2>Colorpencils</h2>
-              <div class="row-ctrls">
-                <button class="button secondary" data-scroll="#strip-colorpencils" data-dir="left">&#x27F5;</button>
-                <button class="button secondary" data-scroll="#strip-colorpencils" data-dir="right">&#x27F6;</button>
-              </div>
-            </div>
-            <div class="strip" id="strip-colorpencils">
+          <div class="strip" id="strip-colorpencils">
                 <div class="h-item">
                   <a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus">
                     <img loading="lazy" src="images/colorpencils/DSC00427.jpg" alt="Goku Nimbus">
@@ -818,67 +800,36 @@
                     <div class="hover-text">Prickly Pear Bloom</div>
                   </a>
                 </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <!-- ===== CRAFTS ===== -->
       <section class="section" id="crafts">
-
-        <!-- Mode A -->
-        <div class="modeA">
-          <details>
-            <summary aria-label="Toggle Crafts"><h2>Crafts</h2></summary>
-            <div class="panel">
-              <div class="grid" id="grid-crafts">
-                <div class="grid-item">
-                  <a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters">
-                    <img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters">
-                    <div class="hover-text">Mind and Hand of Still Waters</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1">
-                    <img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1">
-                    <div class="hover-text">craft1</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2">
-                    <img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2">
-                    <div class="hover-text">craft2</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </details>
+        <div class="cat-header" data-panel="panel-crafts">
+          <h2>Crafts</h2>
+          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Crafts">&#x25BE;</button>
+          <div class="scroll-ctrls modeB-ctrl">
+            <button data-scroll="#strip-crafts" data-dir="left">&#x27F5;</button>
+            <button data-scroll="#strip-crafts" data-dir="right">&#x27F6;</button>
+          </div>
         </div>
 
-        <!-- Mode B -->
-        <div class="modeB">
-          <div class="row">
-            <div class="row-head">
-              <h2>Crafts</h2>
-              <div class="row-ctrls">
-                <button class="button secondary" data-scroll="#strip-crafts" data-dir="left">&#x27F5;</button>
-                <button class="button secondary" data-scroll="#strip-crafts" data-dir="right">&#x27F6;</button>
-              </div>
-            </div>
-            <div class="strip" id="strip-crafts">
-                <div class="h-item">
+        <div class="modeA">
+          <div class="cat-panel collapsed" id="panel-crafts">
+            <div class="grid" id="grid-crafts">
+                <div class="grid-item">
                   <a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters">
                     <img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters">
                     <div class="hover-text">Mind and Hand of Still Waters</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1">
                     <img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1">
                     <div class="hover-text">craft1</div>
                   </a>
                 </div>
-                <div class="h-item">
+                <div class="grid-item">
                   <a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2">
                     <img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2">
                     <div class="hover-text">craft2</div>
@@ -887,45 +838,62 @@
             </div>
           </div>
         </div>
+
+        <div class="modeB">
+          <div class="strip" id="strip-crafts">
+                <div class="h-item">
+                  <a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters">
+                    <img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters">
+                    <div class="hover-text">Mind and Hand of Still Waters</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1">
+                    <img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1">
+                    <div class="hover-text">craft1</div>
+                  </a>
+                </div>
+                <div class="h-item">
+                  <a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2">
+                    <img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2">
+                    <div class="hover-text">craft2</div>
+                  </a>
+                </div>
+          </div>
+        </div>
       </section>
 
-      <!-- ===== WOODBURNINGS ===== -->
       <section class="section" id="woodburnings">
-
-        <!-- Mode A -->
-        <div class="modeA">
-          <details>
-            <summary aria-label="Toggle Woodburnings"><h2>Woodburnings</h2></summary>
-            <div class="panel">
-              <div class="grid" id="grid-woodburnings">
-                <div class="grid-item">
-                  <a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1">
-                    <img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1">
-                    <div class="hover-text">wood1</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2">
-                    <img loading="lazy" src="images/woodburnings/wood2.jpg" alt="wood2">
-                    <div class="hover-text">wood2</div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </details>
+        <div class="cat-header" data-panel="panel-woodburnings">
+          <h2>Woodburnings</h2>
+          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Woodburnings">&#x25BE;</button>
+          <div class="scroll-ctrls modeB-ctrl">
+            <button data-scroll="#strip-woodburnings" data-dir="left">&#x27F5;</button>
+            <button data-scroll="#strip-woodburnings" data-dir="right">&#x27F6;</button>
+          </div>
         </div>
 
-        <!-- Mode B -->
-        <div class="modeB">
-          <div class="row">
-            <div class="row-head">
-              <h2>Woodburnings</h2>
-              <div class="row-ctrls">
-                <button class="button secondary" data-scroll="#strip-woodburnings" data-dir="left">&#x27F5;</button>
-                <button class="button secondary" data-scroll="#strip-woodburnings" data-dir="right">&#x27F6;</button>
-              </div>
+        <div class="modeA">
+          <div class="cat-panel collapsed" id="panel-woodburnings">
+            <div class="grid" id="grid-woodburnings">
+                <div class="grid-item">
+                  <a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1">
+                    <img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1">
+                    <div class="hover-text">wood1</div>
+                  </a>
+                </div>
+                <div class="grid-item">
+                  <a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2">
+                    <img loading="lazy" src="images/woodburnings/wood2.jpg" alt="wood2">
+                    <div class="hover-text">wood2</div>
+                  </a>
+                </div>
             </div>
-            <div class="strip" id="strip-woodburnings">
+          </div>
+        </div>
+
+        <div class="modeB">
+          <div class="strip" id="strip-woodburnings">
                 <div class="h-item">
                   <a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1">
                     <img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1">
@@ -938,7 +906,6 @@
                     <div class="hover-text">wood2</div>
                   </a>
                 </div>
-            </div>
           </div>
         </div>
       </section>
@@ -1000,9 +967,7 @@
         });
 
         if (searching) {
-          document.querySelectorAll('.modeA details').forEach(d => {
-            if (Array.from(d.querySelectorAll('.grid-item')).some(c => c.style.display !== 'none')) d.open = true;
-          });
+          document.querySelectorAll('.cat-panel.collapsed').forEach(p => p.classList.remove('collapsed'));
         }
       });
     }
@@ -1024,6 +989,19 @@
       });
     }
 
+    // Toggle panels in Mode A
+    document.querySelectorAll('.cat-header').forEach(hdr => {
+      hdr.addEventListener('click', e => {
+        if (e.target.closest('.scroll-ctrls')) return;
+        if (document.body.dataset.mode !== 'A') return;
+        const panel = document.getElementById(hdr.dataset.panel);
+        if (!panel) return;
+        panel.classList.toggle('collapsed');
+        hdr.classList.toggle('open');
+      });
+    });
+
+    // Scroll buttons (Mode B)
     document.querySelectorAll('[data-scroll]').forEach(btn => {
       btn.addEventListener('click', () => {
         const el = document.querySelector(btn.getAttribute('data-scroll'));
