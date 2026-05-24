@@ -6,1017 +6,340 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet" />
   <style>
-    :root{
-      --bg:#111; --bg-2:#1a1a1a; --panel:#1c1c1c; --ink:#fff; --muted:#bbb;
-      --accent:#ff69b4; --line:#2f2f2f;
-      --radius:12px; --maxw:1200px; --sticky-h:72px;
+    :root {
+      --bg: #ffffff;
+      --surface: #f7f7f7;
+      --border: #e0e0e0;
+      --ink: #1a1a1a;
+      --muted: #888;
+      --radius: 2px;
+      --maxw: 1320px;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Arial,system-ui,sans-serif}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Helvetica Neue', Arial, sans-serif; }
 
-    header.hero{background:var(--panel);border-bottom:1px solid var(--line);text-align:center;padding:28px 16px 26px}
-    .hero h1{margin:0;font-size:2.1rem}
-    .hero .subtitle{color:var(--muted);margin:8px 0 16px}
-    .hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-
-    .sticky-nav{position:sticky;top:0;z-index:100;background:var(--panel);border-bottom:1px solid var(--line);display:flex;justify-content:center}
-    .nav{display:flex;gap:10px;padding:12px;flex-wrap:wrap;justify-content:center}
-    .nav a{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:999px;background:#232323;border:1px solid var(--line);color:#fff;text-decoration:none;font-weight:600;font-size:0.95rem}
-    .nav a:hover{border-color:#444;background:#2a2a2a}
-    :target{scroll-margin-top:calc(var(--sticky-h) + 10px)}
-
-    .side-switch{position:fixed;right:16px;top:50vh;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px;z-index:90}
-    .side-switch button{border:1px solid var(--line);background:#222;color:#fff;font-size:1.25rem;line-height:1;padding:6px 10px;border-radius:10px;cursor:pointer;min-width:46px}
-    .side-switch button.active{background:var(--accent);border-color:transparent;color:#000;font-weight:700}
-    .side-switch .lbl{font-size:0.75rem;color:var(--muted);text-align:center;margin-bottom:4px}
-    .side-switch .arrow{font-size:1.35rem;line-height:1;display:inline-block}
-
-    main{max-width:var(--maxw);margin:0 auto;padding:20px 16px 24px}
-    .section{padding:24px 0;border-bottom:1px solid var(--line)}
-
-    .button{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;text-decoration:none;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer}
-    .button.secondary{background:transparent;color:#fff;border:1px solid var(--line)}
-
-    .searchbar-global{display:flex;justify-content:center;margin:8px 0 18px}
-    .searchbar-global input{width:100%;max-width:540px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:#141414;color:#fff}
-
-    .cat-header{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid #444;cursor:pointer}
-    .cat-header h2{margin:0;font-size:1.5rem;color:var(--ink);flex:1}
-    .cat-chevron{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px 6px;transition:transform .2s ease;line-height:1}
-    .cat-header.open .cat-chevron{transform:rotate(-180deg)}
-    .scroll-ctrls{display:flex;gap:8px}
-    .scroll-ctrls button{background:transparent;border:1px solid var(--line);color:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:1rem}
-    .scroll-ctrls button:hover{border-color:#555}
-    body[data-mode="A"] .modeA-ctrl{display:inline-flex}
-    body[data-mode="A"] .modeB-ctrl{display:none}
-    body[data-mode="B"] .modeA-ctrl{display:none}
-    body[data-mode="B"] .modeB-ctrl{display:flex}
-
-    .cat-panel{margin-top:14px}
-    .cat-panel.collapsed{display:none}
-    .showmore-wrap{margin-top:10px;display:flex;justify-content:center}
-
-    .grid{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
-    .grid-item{position:relative;width:calc(33.333% - 12px)}
-    .grid img{width:100%;height:auto;border-radius:10px;cursor:pointer;display:block}
-    .hover-text{position:absolute;left:0;right:0;bottom:0;padding:20px 12px 10px;background:linear-gradient(transparent,rgba(0,0,0,0.88));border-radius:0 0 10px 10px;opacity:0;transition:opacity .3s ease;font-size:0.88rem;font-style:italic;font-weight:500;color:var(--accent);text-align:center;letter-spacing:0.03em}
-    .grid-item:hover .hover-text,.h-item:hover .hover-text{opacity:1}
-
-    .grid[data-limit] .grid-item{display:none}
-    .grid[data-limit] .grid-item:nth-child(-n+12){display:block}
-
-    .strip{display:flex;gap:14px;overflow-x:auto;padding:14px 0;scroll-snap-type:x mandatory}
-    .h-item{flex:0 0 auto;scroll-snap-align:start;width:280px;position:relative}
-    .h-item img{width:100%;height:auto;border-radius:10px;display:block;cursor:pointer}
-
-    body[data-mode="A"] .modeA{display:block}
-    body[data-mode="A"] .modeB{display:none}
-    body[data-mode="B"] .modeA{display:none}
-    body[data-mode="B"] .modeB{display:block}
-
-    @media(max-width:900px){.grid-item{width:calc(50% - 9px)}}
-    @media(max-width:640px){
-      .side-switch{right:10px;top:auto;bottom:16px;transform:none}
-      .nav a{height:36px;padding:0 10px;font-size:0.85rem}
-      .h-item{width:220px}
-      .hero h1{font-size:1.7rem}
-      input,.searchbar-global input{font-size:16px}
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px; border-bottom: 1px solid var(--border);
+      background: #fff; position: sticky; top: 0; z-index: 200;
     }
-    @media(max-width:480px){.grid-item{width:100%}}
+    .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-right { display: flex; gap: 20px; align-items: center; }
+    .nav-right a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-right a:hover { color: var(--ink); }
+
+    /* HERO */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero {
+      position: relative; min-height: 700px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('images/hero_bg1.jpeg') center center / cover no-repeat;
+      filter: brightness(.5); z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; padding: 0 20px; }
+    .hero-eyebrow {
+      font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(255,255,255,.7); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: 1s;
+    }
+    .hero h1 {
+      font-size: 4.5rem; font-weight: 200; letter-spacing: .12em;
+      text-transform: uppercase; color: #fff; line-height: 1;
+      opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: 1.3s;
+    }
+    .hero p {
+      margin: 24px 0 36px; color: rgba(255,255,255,.75);
+      font-size: 1rem; letter-spacing: .06em; font-weight: 300;
+      opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: 1.6s;
+    }
+    .hero-btns {
+      display: flex; gap: 16px; justify-content: center;
+      opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: 1.9s;
+    }
+    .btn { display: inline-block; padding: 14px 36px; font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; text-decoration: none; border-radius: var(--radius); font-weight: 500; transition: all .25s; }
+    .btn-primary { background: #fff; color: #000; }
+    .btn-primary:hover { background: #e8e8e8; }
+    .btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.6); }
+    .btn-outline:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+
+    /* SEARCH */
+    .search-wrap { padding: 32px 48px 0; max-width: var(--maxw); margin: 0 auto; }
+    .search-wrap input {
+      width: 100%; padding: 12px 16px; border: 1px solid var(--border);
+      border-radius: var(--radius); font-size: .9rem; color: var(--ink);
+      background: var(--surface); outline: none; transition: border-color .2s;
+    }
+    .search-wrap input:focus { border-color: var(--ink); }
+
+    /* SECTION */
+    .section-wrap { padding: 64px 48px 0; max-width: var(--maxw); margin: 0 auto; }
+    .section-wrap:last-of-type { padding-bottom: 80px; }
+    .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 28px; }
+    .section-header h2 { font-size: .82rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; border-bottom: 2px solid var(--ink); padding-bottom: 6px; }
+
+    /* GRID */
+    .art-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+    .art-card { cursor: pointer; }
+    .art-card-img { overflow: hidden; background: var(--surface); aspect-ratio: 1; }
+    .art-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    .art-card:hover .art-card-img img { transform: scale(1.06); }
+    .art-card-info { padding: 12px 0 0; border-top: 1px solid var(--border); margin-top: 10px; }
+    .art-card-title { font-size: .88rem; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+    .art-card-meta { font-size: .72rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+
+    /* HIDDEN FOR SEARCH / SHOW MORE */
+    .art-card[hidden] { display: none; }
+    .art-grid[data-limit] .art-card:nth-child(n+10) { display: none; }
+    .art-grid[data-limit].expanded .art-card { display: block; }
+
+    .showmore-wrap { margin-top: 24px; text-align: center; }
+    .btn-showmore { background: transparent; border: 1px solid var(--border); color: var(--ink); padding: 11px 32px; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; border-radius: var(--radius); transition: all .2s; }
+    .btn-showmore:hover { border-color: var(--ink); }
+
+    /* DIVIDER */
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 64px 48px 0; }
+
+    /* QUOTE STRIP */
+    .quote-strip { padding: 72px 48px; text-align: center; background: var(--surface); margin-top: 64px; }
+    .quote-strip blockquote { font-size: 1.4rem; font-weight: 200; letter-spacing: .03em; color: var(--ink); max-width: 640px; margin: 0 auto 16px; line-height: 1.6; font-style: italic; }
+    .quote-strip cite { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); font-style: normal; }
+
+    /* CONTACT / FOOTER */
+    #contact { background: var(--ink); color: #ccc; padding: 64px 48px; text-align: center; margin-top: 80px; }
+    #contact h2 { font-size: .82rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #fff; margin-bottom: 20px; }
+    #contact p { margin-bottom: 10px; font-size: .9rem; }
+    #contact a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); transition: border-color .2s; }
+    #contact a:hover { border-color: #fff; }
+
+    .site-footer { background: var(--ink); color: #555; padding: 24px 48px; text-align: center; font-size: .75rem; letter-spacing: .05em; border-top: 1px solid #2a2a2a; }
+    .site-footer a { color: #777; text-decoration: none; margin: 0 8px; }
+    .site-footer a:hover { color: #ccc; }
+
+    @media(max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .art-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+      .section-wrap, .search-wrap { padding-left: 20px; padding-right: 20px; }
+      .section-divider { margin-left: 20px; margin-right: 20px; }
+      .hero h1 { font-size: 2.8rem; }
+      .quote-strip { padding: 48px 20px; }
+    }
+    @media(max-width: 480px) {
+      .art-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
-<body data-mode="A">
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Dizzy Cult LLC</a>
+    <ul class="nav-links">
+      <li><a href="#canvases">Canvases</a></li>
+      <li><a href="#watercolors">Watercolors</a></li>
+      <li><a href="#colorpencils">Color Pencils</a></li>
+      <li><a href="#crafts">Crafts</a></li>
+      <li><a href="#woodburnings">Wood Burnings</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
   <header class="hero" aria-label="Site intro">
-    <h1>Art made by Sydney</h1>
-    <p class="subtitle">Welcome to my trippy world.</p>
-    <div class="hero-actions">
-      <a class="button secondary" href="about.html">About Me</a>
-      <a class="button" href="#contact">Contact</a>
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Original artwork by Sydney Kelly</p>
+      <h1>Art Made<br>by Sydney</h1>
+      <p>Welcome to my trippy world.</p>
+      <div class="hero-btns">
+        <a href="#canvases" class="btn btn-primary">View Collection</a>
+        <a href="about.html" class="btn btn-outline">About the Artist</a>
+      </div>
     </div>
   </header>
 
-  <div class="sticky-nav" id="stickyNav">
-    <nav class="nav" aria-label="Primary">
-      <a href="#canvases">Canvases</a>
-      <a href="#watercolors">Watercolors</a>
-      <a href="#colorpencils">Colorpencils</a>
-      <a href="#crafts">Crafts</a>
-      <a href="#woodburnings">Woodburnings</a>
-    </nav>
+  <div class="search-wrap">
+    <input id="searchGlobal" type="search" placeholder="Search all artworks..." aria-label="Search artworks" />
   </div>
 
-  <aside class="side-switch" aria-label="View mode switch">
-    <div class="lbl">Scroll type</div>
-    <button id="btnModeA" class="active" title="Vertical"><span class="arrow">&#x2195;&#xFE0E;</span></button>
-    <button id="btnModeB" title="Horizontal"><span class="arrow">&#x2194;&#xFE0E;</span></button>
-  </aside>
-
-  <main>
-    <div class="searchbar-global">
-      <input id="searchGlobal" type="search" placeholder="Search all artworks..." aria-label="Search artworks" />
+  <!-- CANVASES -->
+  <div class="section-wrap" id="canvases">
+    <div class="section-header"><h2>Canvases</h2></div>
+    <div class="art-grid" id="grid-canvases">
+      <div class="art-card"><a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden"></div></a><div class="art-card-info"><div class="art-card-title">Flourescent Garden</div><div class="art-card-meta">Canvas</div></div></div>
+      <div class="art-card"><a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy"></div></a><div class="art-card-info"><div class="art-card-title">Whispers in the Canopy</div><div class="art-card-meta">Canvas</div></div></div>
+      <div class="art-card"><a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo"></div></a><div class="art-card-info"><div class="art-card-title">La Garita del Diablo</div><div class="art-card-meta">Canvas &nbsp;·&nbsp; Sold</div></div></div>
+      <div class="art-card"><a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery"></div></a><div class="art-card-info"><div class="art-card-title">Gatepass Cemetery</div><div class="art-card-meta">Canvas</div></div></div>
+      <div class="art-card"><a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon"></div></a><div class="art-card-info"><div class="art-card-title">Sedona Moon</div><div class="art-card-meta">Canvas</div></div></div>
+      <div class="art-card"><a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight"></div></a><div class="art-card-info"><div class="art-card-title">Shell of Sight</div><div class="art-card-meta">Canvas</div></div></div>
+      <div class="art-card"><a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness"></div></a><div class="art-card-info"><div class="art-card-title">Sunset Madness</div><div class="art-card-meta">Canvas</div></div></div>
     </div>
+  </div>
 
-      <section class="section" id="canvases">
-        <div class="cat-header" data-panel="panel-canvases">
-          <h2>Canvases</h2>
-          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Canvases">&#x25BE;</button>
-          <div class="scroll-ctrls modeB-ctrl">
-            <button data-scroll="#strip-canvases" data-dir="left">&#x27F5;</button>
-            <button data-scroll="#strip-canvases" data-dir="right">&#x27F6;</button>
-          </div>
-        </div>
+  <div class="quote-strip">
+    <blockquote>"Each piece is a window into a world where the familiar becomes something entirely new."</blockquote>
+    <cite>Sydney Kelly &nbsp;·&nbsp; Artist</cite>
+  </div>
 
-        <div class="modeA">
-          <div class="cat-panel collapsed" id="panel-canvases">
-            <div class="grid" id="grid-canvases">
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden">
-                    <img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden">
-                    <div class="hover-text">Flourescent Garden</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy">
-                    <img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy">
-                    <div class="hover-text">Whispers in the Canopy</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)">
-                    <img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo (SOLD)">
-                    <div class="hover-text">La Garita del Diablo (SOLD)</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery">
-                    <img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery">
-                    <div class="hover-text">Gatepass Cemetery</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon">
-                    <img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon">
-                    <div class="hover-text">Sedona Moon</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight">
-                    <img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight">
-                    <div class="hover-text">Shell of Sight</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness">
-                    <img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness">
-                    <div class="hover-text">Sunset Madness</div>
-                  </a>
-                </div>
-            </div>
-          </div>
-        </div>
+  <!-- WATERCOLORS -->
+  <div class="section-wrap" id="watercolors">
+    <div class="section-header"><h2>Watercolors</h2></div>
+    <div class="art-grid" id="grid-watercolors" data-limit>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch"></div></a><div class="art-card-info"><div class="art-card-title">Pumpkin Patch</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00403.jpg" data-lightbox="Watercolors" data-title="Tamarindo"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00403.jpg" alt="Tamarindo"></div></a><div class="art-card-info"><div class="art-card-title">Tamarindo</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00405.jpg" data-lightbox="Watercolors" data-title="Sweet Yams"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00405.jpg" alt="Sweet Yams"></div></a><div class="art-card-info"><div class="art-card-title">Sweet Yams</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00406.jpg" data-lightbox="Watercolors" data-title="Penny-Eyes"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00406.jpg" alt="Penny-Eyes"></div></a><div class="art-card-info"><div class="art-card-title">Penny-Eyes</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00407.jpg" data-lightbox="Watercolors" data-title="Corazon de Monstera"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00407.jpg" alt="Corazon de Monstera"></div></a><div class="art-card-info"><div class="art-card-title">Corazon de Monstera</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00408.jpg" data-lightbox="Watercolors" data-title="Shroom-Bunny"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00408.jpg" alt="Shroom-Bunny"></div></a><div class="art-card-info"><div class="art-card-title">Shroom-Bunny</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00409.jpg" data-lightbox="Watercolors" data-title="Lucifungus"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00409.jpg" alt="Lucifungus"></div></a><div class="art-card-info"><div class="art-card-title">Lucifungus</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00410.jpg" data-lightbox="Watercolors" data-title="MushRam"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00410.jpg" alt="MushRam"></div></a><div class="art-card-info"><div class="art-card-title">MushRam</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00411.jpg" data-lightbox="Watercolors" data-title="Moon Fairy"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00411.jpg" alt="Moon Fairy"></div></a><div class="art-card-info"><div class="art-card-title">Moon Fairy</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00412.jpg" data-lightbox="Watercolors" data-title="Sporella Fairy"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00412.jpg" alt="Sporella Fairy"></div></a><div class="art-card-info"><div class="art-card-title">Sporella Fairy</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00413.jpg" data-lightbox="Watercolors" data-title="Lumora"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00413.jpg" alt="Lumora"></div></a><div class="art-card-info"><div class="art-card-title">Lumora</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00414.jpg" data-lightbox="Watercolors" data-title="Strawmycete Witch"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00414.jpg" alt="Strawmycete Witch"></div></a><div class="art-card-info"><div class="art-card-title">Strawmycete Witch</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00415.jpg" data-lightbox="Watercolors" data-title="Oculus Bloom"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00415.jpg" alt="Oculus Bloom"></div></a><div class="art-card-info"><div class="art-card-title">Oculus Bloom</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00416.jpg" data-lightbox="Watercolors" data-title="Mariquita"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00416.jpg" alt="Mariquita"></div></a><div class="art-card-info"><div class="art-card-title">Mariquita</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00418.jpg" data-lightbox="Watercolors" data-title="Blow up Alien"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00418.jpg" alt="Blow up Alien"></div></a><div class="art-card-info"><div class="art-card-title">Blow up Alien</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00419.jpg" data-lightbox="Watercolors" data-title="TamaYoshi"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00419.jpg" alt="TamaYoshi"></div></a><div class="art-card-info"><div class="art-card-title">TamaYoshi</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00420.jpg" data-lightbox="Watercolors" data-title="Kameha Takeout"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00420.jpg" alt="Kameha Takeout"></div></a><div class="art-card-info"><div class="art-card-title">Kameha Takeout</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00421.jpg" data-lightbox="Watercolors" data-title="Lego Portrait"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00421.jpg" alt="Lego Portrait"></div></a><div class="art-card-info"><div class="art-card-title">Lego Portrait</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00422.jpg" data-lightbox="Watercolors" data-title="Zelda"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00422.jpg" alt="Zelda"></div></a><div class="art-card-info"><div class="art-card-title">Zelda</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00423.jpg" data-lightbox="Watercolors" data-title="Sonoran Spectrum"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00423.jpg" alt="Sonoran Spectrum"></div></a><div class="art-card-info"><div class="art-card-title">Sonoran Spectrum</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00424.jpg" data-lightbox="Watercolors" data-title="Poppy Patch"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00424.jpg" alt="Poppy Patch"></div></a><div class="art-card-info"><div class="art-card-title">Poppy Patch</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00425.jpg" data-lightbox="Watercolors" data-title="Lunacap Oracle"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00425.jpg" alt="Lunacap Oracle"></div></a><div class="art-card-info"><div class="art-card-title">Lunacap Oracle</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00426.jpg" data-lightbox="Watercolors" data-title="Mt Lemmon Cabin"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00426.jpg" alt="Mt Lemmon Cabin"></div></a><div class="art-card-info"><div class="art-card-title">Mt Lemmon Cabin</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00555.JPG" data-lightbox="Watercolors" data-title="Velvet Bite"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00555.JPG" alt="Velvet Bite"></div></a><div class="art-card-info"><div class="art-card-title">Velvet Bite</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00556.JPG" data-lightbox="Watercolors" data-title="Frog wizard"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00556.JPG" alt="Frog wizard"></div></a><div class="art-card-info"><div class="art-card-title">Frog Wizard</div><div class="art-card-meta">Watercolor</div></div></div>
+      <div class="art-card"><a href="images/watercolorpencils/DSC00557.JPG" data-lightbox="Watercolors" data-title="Tucancillo Verde"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00557.JPG" alt="Tucancillo Verde"></div></a><div class="art-card-info"><div class="art-card-title">Tucancillo Verde</div><div class="art-card-meta">Watercolor</div></div></div>
+    </div>
+    <div class="showmore-wrap" id="wrap-more-watercolors">
+      <button class="btn-showmore" id="btn-more-watercolors">Show more</button>
+    </div>
+  </div>
 
-        <div class="modeB">
-          <div class="strip" id="strip-canvases">
-                <div class="h-item">
-                  <a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden">
-                    <img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden">
-                    <div class="hover-text">Flourescent Garden</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy">
-                    <img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy">
-                    <div class="hover-text">Whispers in the Canopy</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)">
-                    <img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo (SOLD)">
-                    <div class="hover-text">La Garita del Diablo (SOLD)</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery">
-                    <img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery">
-                    <div class="hover-text">Gatepass Cemetery</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon">
-                    <img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon">
-                    <div class="hover-text">Sedona Moon</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight">
-                    <img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight">
-                    <div class="hover-text">Shell of Sight</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness">
-                    <img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness">
-                    <div class="hover-text">Sunset Madness</div>
-                  </a>
-                </div>
-          </div>
-        </div>
-      </section>
+  <hr class="section-divider">
 
-      <section class="section" id="watercolors">
-        <div class="cat-header" data-panel="panel-watercolors">
-          <h2>Watercolors</h2>
-          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Watercolors">&#x25BE;</button>
-          <div class="scroll-ctrls modeB-ctrl">
-            <button data-scroll="#strip-watercolors" data-dir="left">&#x27F5;</button>
-            <button data-scroll="#strip-watercolors" data-dir="right">&#x27F6;</button>
-          </div>
-        </div>
+  <!-- COLOR PENCILS -->
+  <div class="section-wrap" id="colorpencils">
+    <div class="section-header"><h2>Color Pencils</h2></div>
+    <div class="art-grid" id="grid-colorpencils" data-limit>
+      <div class="art-card"><a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00427.jpg" alt="Goku Nimbus"></div></a><div class="art-card-info"><div class="art-card-title">Goku Nimbus</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00428.jpg" data-lightbox="Colorpencils" data-title="Bunny Bow"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00428.jpg" alt="Bunny Bow"></div></a><div class="art-card-info"><div class="art-card-title">Bunny Bow</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00429.jpg" data-lightbox="Colorpencils" data-title="Galatic Sketch"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00429.jpg" alt="Galatic Sketch"></div></a><div class="art-card-info"><div class="art-card-title">Galatic Sketch</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00430.jpg" data-lightbox="Colorpencils" data-title="Lucid Spider"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00430.jpg" alt="Lucid Spider"></div></a><div class="art-card-info"><div class="art-card-title">Lucid Spider</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00431.jpg" data-lightbox="Colorpencils" data-title="Self Portrait"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00431.jpg" alt="Self Portrait"></div></a><div class="art-card-info"><div class="art-card-title">Self Portrait</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00432.jpg" data-lightbox="Colorpencils" data-title="All-Seeing Ladybug"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00432.jpg" alt="All-Seeing Ladybug"></div></a><div class="art-card-info"><div class="art-card-title">All-Seeing Ladybug</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00433.jpg" data-lightbox="Colorpencils" data-title="Nebula Forseeing"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00433.jpg" alt="Nebula Forseeing"></div></a><div class="art-card-info"><div class="art-card-title">Nebula Forseeing</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00434.jpg" data-lightbox="Colorpencils" data-title="Mushroom Guardian"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00434.jpg" alt="Mushroom Guardian"></div></a><div class="art-card-info"><div class="art-card-title">Mushroom Guardian</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00435.jpg" data-lightbox="Colorpencils" data-title="Eclipse of Desire"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00435.jpg" alt="Eclipse of Desire"></div></a><div class="art-card-info"><div class="art-card-title">Eclipse of Desire</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00436.jpg" data-lightbox="Colorpencils" data-title="Weeping Sunfloor"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00436.jpg" alt="Weeping Sunfloor"></div></a><div class="art-card-info"><div class="art-card-title">Weeping Sunfloor</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00437.jpg" data-lightbox="Colorpencils" data-title="Storm in the Heart"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00437.jpg" alt="Storm in the Heart"></div></a><div class="art-card-info"><div class="art-card-title">Storm in the Heart</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00438.jpg" data-lightbox="Colorpencils" data-title="Tucson on the Moon"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00438.jpg" alt="Tucson on the Moon"></div></a><div class="art-card-info"><div class="art-card-title">Tucson on the Moon</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00439.jpg" data-lightbox="Colorpencils" data-title="Refractions of Me"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00439.jpg" alt="Refractions of Me"></div></a><div class="art-card-info"><div class="art-card-title">Refractions of Me</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00440.jpg" data-lightbox="Colorpencils" data-title="Kristal (unfinished)"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00440.jpg" alt="Kristal (unfinished)"></div></a><div class="art-card-info"><div class="art-card-title">Kristal (unfinished)</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00441.jpg" data-lightbox="Colorpencils" data-title="Cherry Lips &amp; Creams"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00441.jpg" alt="Cherry Lips &amp; Creams"></div></a><div class="art-card-info"><div class="art-card-title">Cherry Lips &amp; Creams</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00442.jpg" data-lightbox="Colorpencils" data-title="Donna Summers"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00442.jpg" alt="Donna Summers"></div></a><div class="art-card-info"><div class="art-card-title">Donna Summers</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00443.jpg" data-lightbox="Colorpencils" data-title="Apart in the Sky"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00443.jpg" alt="Apart in the Sky"></div></a><div class="art-card-info"><div class="art-card-title">Apart in the Sky</div><div class="art-card-meta">Color Pencil</div></div></div>
+      <div class="art-card"><a href="images/colorpencils/DSC00444.jpg" data-lightbox="Colorpencils" data-title="Prickly Pear Bloom"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00444.jpg" alt="Prickly Pear Bloom"></div></a><div class="art-card-info"><div class="art-card-title">Prickly Pear Bloom</div><div class="art-card-meta">Color Pencil</div></div></div>
+    </div>
+    <div class="showmore-wrap" id="wrap-more-colorpencils">
+      <button class="btn-showmore" id="btn-more-colorpencils">Show more</button>
+    </div>
+  </div>
 
-        <div class="modeA">
-          <div class="cat-panel collapsed" id="panel-watercolors">
-            <div class="grid" id="grid-watercolors" data-limit>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch">
-                    <div class="hover-text">Pumpkin Patch</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00403.jpg" data-lightbox="Watercolors" data-title="Tamarindo">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00403.jpg" alt="Tamarindo">
-                    <div class="hover-text">Tamarindo</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00405.jpg" data-lightbox="Watercolors" data-title="Sweet Yams">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00405.jpg" alt="Sweet Yams">
-                    <div class="hover-text">Sweet Yams</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00406.jpg" data-lightbox="Watercolors" data-title="Penny-Eyes">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00406.jpg" alt="Penny-Eyes">
-                    <div class="hover-text">Penny-Eyes</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00407.jpg" data-lightbox="Watercolors" data-title="Corazon de Monstera">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00407.jpg" alt="Corazon de Monstera">
-                    <div class="hover-text">Corazon de Monstera</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00408.jpg" data-lightbox="Watercolors" data-title="Shroom-Bunny">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00408.jpg" alt="Shroom-Bunny">
-                    <div class="hover-text">Shroom-Bunny</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00409.jpg" data-lightbox="Watercolors" data-title="Lucifungus">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00409.jpg" alt="Lucifungus">
-                    <div class="hover-text">Lucifungus</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00410.jpg" data-lightbox="Watercolors" data-title="MushRam">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00410.jpg" alt="MushRam">
-                    <div class="hover-text">MushRam</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00411.jpg" data-lightbox="Watercolors" data-title="Moon Fairy">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00411.jpg" alt="Moon Fairy">
-                    <div class="hover-text">Moon Fairy</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00412.jpg" data-lightbox="Watercolors" data-title="Sporella Fairy">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00412.jpg" alt="Sporella Fairy">
-                    <div class="hover-text">Sporella Fairy</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00413.jpg" data-lightbox="Watercolors" data-title="Lumora">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00413.jpg" alt="Lumora">
-                    <div class="hover-text">Lumora</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00414.jpg" data-lightbox="Watercolors" data-title="Strawmycete Witch">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00414.jpg" alt="Strawmycete Witch">
-                    <div class="hover-text">Strawmycete Witch</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00415.jpg" data-lightbox="Watercolors" data-title="Oculus Bloom">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00415.jpg" alt="Oculus Bloom">
-                    <div class="hover-text">Oculus Bloom</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00416.jpg" data-lightbox="Watercolors" data-title="Mariquita">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00416.jpg" alt="Mariquita">
-                    <div class="hover-text">Mariquita</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00418.jpg" data-lightbox="Watercolors" data-title="Blow up Alien">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00418.jpg" alt="Blow up Alien">
-                    <div class="hover-text">Blow up Alien</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00419.jpg" data-lightbox="Watercolors" data-title="TamaYoshi">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00419.jpg" alt="TamaYoshi">
-                    <div class="hover-text">TamaYoshi</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00420.jpg" data-lightbox="Watercolors" data-title="Kameha Takeout">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00420.jpg" alt="Kameha Takeout">
-                    <div class="hover-text">Kameha Takeout</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00421.jpg" data-lightbox="Watercolors" data-title="Lego Portrait">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00421.jpg" alt="Lego Portrait">
-                    <div class="hover-text">Lego Portrait</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00422.jpg" data-lightbox="Watercolors" data-title="Zelda">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00422.jpg" alt="Zelda">
-                    <div class="hover-text">Zelda</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00423.jpg" data-lightbox="Watercolors" data-title="Sonoran Spectrum">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00423.jpg" alt="Sonoran Spectrum">
-                    <div class="hover-text">Sonoran Spectrum</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00424.jpg" data-lightbox="Watercolors" data-title="Poppy Patch">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00424.jpg" alt="Poppy Patch">
-                    <div class="hover-text">Poppy Patch</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00425.jpg" data-lightbox="Watercolors" data-title="Lunacap Oracle">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00425.jpg" alt="Lunacap Oracle">
-                    <div class="hover-text">Lunacap Oracle</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00426.jpg" data-lightbox="Watercolors" data-title="Mt Lemmon Cabin">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00426.jpg" alt="Mt Lemmon Cabin">
-                    <div class="hover-text">Mt Lemmon Cabin</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00555.JPG" data-lightbox="Watercolors" data-title="Velvet Bite">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00555.JPG" alt="Velvet Bite">
-                    <div class="hover-text">Velvet Bite</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00556.JPG" data-lightbox="Watercolors" data-title="Frog wizard">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00556.JPG" alt="Frog wizard">
-                    <div class="hover-text">Frog wizard</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/watercolorpencils/DSC00557.JPG" data-lightbox="Watercolors" data-title="Tucancillo Verde">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00557.JPG" alt="Tucancillo Verde">
-                    <div class="hover-text">Tucancillo Verde</div>
-                  </a>
-                </div>
-            </div>
-              <div class="showmore-wrap">
-                <button id="btn-more-watercolors" class="button secondary">Show more</button>
-              </div>
-          </div>
-        </div>
+  <hr class="section-divider">
 
-        <div class="modeB">
-          <div class="strip" id="strip-watercolors">
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch">
-                    <div class="hover-text">Pumpkin Patch</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00403.jpg" data-lightbox="Watercolors" data-title="Tamarindo">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00403.jpg" alt="Tamarindo">
-                    <div class="hover-text">Tamarindo</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00405.jpg" data-lightbox="Watercolors" data-title="Sweet Yams">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00405.jpg" alt="Sweet Yams">
-                    <div class="hover-text">Sweet Yams</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00406.jpg" data-lightbox="Watercolors" data-title="Penny-Eyes">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00406.jpg" alt="Penny-Eyes">
-                    <div class="hover-text">Penny-Eyes</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00407.jpg" data-lightbox="Watercolors" data-title="Corazon de Monstera">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00407.jpg" alt="Corazon de Monstera">
-                    <div class="hover-text">Corazon de Monstera</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00408.jpg" data-lightbox="Watercolors" data-title="Shroom-Bunny">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00408.jpg" alt="Shroom-Bunny">
-                    <div class="hover-text">Shroom-Bunny</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00409.jpg" data-lightbox="Watercolors" data-title="Lucifungus">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00409.jpg" alt="Lucifungus">
-                    <div class="hover-text">Lucifungus</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00410.jpg" data-lightbox="Watercolors" data-title="MushRam">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00410.jpg" alt="MushRam">
-                    <div class="hover-text">MushRam</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00411.jpg" data-lightbox="Watercolors" data-title="Moon Fairy">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00411.jpg" alt="Moon Fairy">
-                    <div class="hover-text">Moon Fairy</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00412.jpg" data-lightbox="Watercolors" data-title="Sporella Fairy">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00412.jpg" alt="Sporella Fairy">
-                    <div class="hover-text">Sporella Fairy</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00413.jpg" data-lightbox="Watercolors" data-title="Lumora">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00413.jpg" alt="Lumora">
-                    <div class="hover-text">Lumora</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00414.jpg" data-lightbox="Watercolors" data-title="Strawmycete Witch">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00414.jpg" alt="Strawmycete Witch">
-                    <div class="hover-text">Strawmycete Witch</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00415.jpg" data-lightbox="Watercolors" data-title="Oculus Bloom">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00415.jpg" alt="Oculus Bloom">
-                    <div class="hover-text">Oculus Bloom</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00416.jpg" data-lightbox="Watercolors" data-title="Mariquita">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00416.jpg" alt="Mariquita">
-                    <div class="hover-text">Mariquita</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00418.jpg" data-lightbox="Watercolors" data-title="Blow up Alien">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00418.jpg" alt="Blow up Alien">
-                    <div class="hover-text">Blow up Alien</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00419.jpg" data-lightbox="Watercolors" data-title="TamaYoshi">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00419.jpg" alt="TamaYoshi">
-                    <div class="hover-text">TamaYoshi</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00420.jpg" data-lightbox="Watercolors" data-title="Kameha Takeout">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00420.jpg" alt="Kameha Takeout">
-                    <div class="hover-text">Kameha Takeout</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00421.jpg" data-lightbox="Watercolors" data-title="Lego Portrait">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00421.jpg" alt="Lego Portrait">
-                    <div class="hover-text">Lego Portrait</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00422.jpg" data-lightbox="Watercolors" data-title="Zelda">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00422.jpg" alt="Zelda">
-                    <div class="hover-text">Zelda</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00423.jpg" data-lightbox="Watercolors" data-title="Sonoran Spectrum">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00423.jpg" alt="Sonoran Spectrum">
-                    <div class="hover-text">Sonoran Spectrum</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00424.jpg" data-lightbox="Watercolors" data-title="Poppy Patch">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00424.jpg" alt="Poppy Patch">
-                    <div class="hover-text">Poppy Patch</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00425.jpg" data-lightbox="Watercolors" data-title="Lunacap Oracle">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00425.jpg" alt="Lunacap Oracle">
-                    <div class="hover-text">Lunacap Oracle</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00426.jpg" data-lightbox="Watercolors" data-title="Mt Lemmon Cabin">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00426.jpg" alt="Mt Lemmon Cabin">
-                    <div class="hover-text">Mt Lemmon Cabin</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00555.JPG" data-lightbox="Watercolors" data-title="Velvet Bite">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00555.JPG" alt="Velvet Bite">
-                    <div class="hover-text">Velvet Bite</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00556.JPG" data-lightbox="Watercolors" data-title="Frog wizard">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00556.JPG" alt="Frog wizard">
-                    <div class="hover-text">Frog wizard</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/watercolorpencils/DSC00557.JPG" data-lightbox="Watercolors" data-title="Tucancillo Verde">
-                    <img loading="lazy" src="images/watercolorpencils/DSC00557.JPG" alt="Tucancillo Verde">
-                    <div class="hover-text">Tucancillo Verde</div>
-                  </a>
-                </div>
-          </div>
-        </div>
-      </section>
+  <!-- CRAFTS -->
+  <div class="section-wrap" id="crafts">
+    <div class="section-header"><h2>Crafts</h2></div>
+    <div class="art-grid" id="grid-crafts">
+      <div class="art-card"><a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters"><div class="art-card-img"><img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters"></div></a><div class="art-card-info"><div class="art-card-title">Mind and Hand of Still Waters</div><div class="art-card-meta">Craft</div></div></div>
+      <div class="art-card"><a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1"><div class="art-card-img"><img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1"></div></a><div class="art-card-info"><div class="art-card-title">craft1</div><div class="art-card-meta">Craft</div></div></div>
+      <div class="art-card"><a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2"><div class="art-card-img"><img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2"></div></a><div class="art-card-info"><div class="art-card-title">craft2</div><div class="art-card-meta">Craft</div></div></div>
+    </div>
+  </div>
 
-      <section class="section" id="colorpencils">
-        <div class="cat-header" data-panel="panel-colorpencils">
-          <h2>Colorpencils</h2>
-          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Colorpencils">&#x25BE;</button>
-          <div class="scroll-ctrls modeB-ctrl">
-            <button data-scroll="#strip-colorpencils" data-dir="left">&#x27F5;</button>
-            <button data-scroll="#strip-colorpencils" data-dir="right">&#x27F6;</button>
-          </div>
-        </div>
+  <hr class="section-divider">
 
-        <div class="modeA">
-          <div class="cat-panel collapsed" id="panel-colorpencils">
-            <div class="grid" id="grid-colorpencils" data-limit>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus">
-                    <img loading="lazy" src="images/colorpencils/DSC00427.jpg" alt="Goku Nimbus">
-                    <div class="hover-text">Goku Nimbus</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00428.jpg" data-lightbox="Colorpencils" data-title="Bunny Bow">
-                    <img loading="lazy" src="images/colorpencils/DSC00428.jpg" alt="Bunny Bow">
-                    <div class="hover-text">Bunny Bow</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00429.jpg" data-lightbox="Colorpencils" data-title="Galatic Sketch">
-                    <img loading="lazy" src="images/colorpencils/DSC00429.jpg" alt="Galatic Sketch">
-                    <div class="hover-text">Galatic Sketch</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00430.jpg" data-lightbox="Colorpencils" data-title="Lucid Spider">
-                    <img loading="lazy" src="images/colorpencils/DSC00430.jpg" alt="Lucid Spider">
-                    <div class="hover-text">Lucid Spider</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00431.jpg" data-lightbox="Colorpencils" data-title="Self Portrait">
-                    <img loading="lazy" src="images/colorpencils/DSC00431.jpg" alt="Self Portrait">
-                    <div class="hover-text">Self Portrait</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00432.jpg" data-lightbox="Colorpencils" data-title="All-Seeing Ladybug">
-                    <img loading="lazy" src="images/colorpencils/DSC00432.jpg" alt="All-Seeing Ladybug">
-                    <div class="hover-text">All-Seeing Ladybug</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00433.jpg" data-lightbox="Colorpencils" data-title="Nebula Forseeing">
-                    <img loading="lazy" src="images/colorpencils/DSC00433.jpg" alt="Nebula Forseeing">
-                    <div class="hover-text">Nebula Forseeing</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00434.jpg" data-lightbox="Colorpencils" data-title="Mushroom Guardian">
-                    <img loading="lazy" src="images/colorpencils/DSC00434.jpg" alt="Mushroom Guardian">
-                    <div class="hover-text">Mushroom Guardian</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00435.jpg" data-lightbox="Colorpencils" data-title="Eclipse of Desire">
-                    <img loading="lazy" src="images/colorpencils/DSC00435.jpg" alt="Eclipse of Desire">
-                    <div class="hover-text">Eclipse of Desire</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00436.jpg" data-lightbox="Colorpencils" data-title="Weeping Sunfloor">
-                    <img loading="lazy" src="images/colorpencils/DSC00436.jpg" alt="Weeping Sunfloor">
-                    <div class="hover-text">Weeping Sunfloor</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00437.jpg" data-lightbox="Colorpencils" data-title="Storm in the Heart">
-                    <img loading="lazy" src="images/colorpencils/DSC00437.jpg" alt="Storm in the Heart">
-                    <div class="hover-text">Storm in the Heart</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00438.jpg" data-lightbox="Colorpencils" data-title="Tucson on the Moon">
-                    <img loading="lazy" src="images/colorpencils/DSC00438.jpg" alt="Tucson on the Moon">
-                    <div class="hover-text">Tucson on the Moon</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00439.jpg" data-lightbox="Colorpencils" data-title="Refractions of Me">
-                    <img loading="lazy" src="images/colorpencils/DSC00439.jpg" alt="Refractions of Me">
-                    <div class="hover-text">Refractions of Me</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00440.jpg" data-lightbox="Colorpencils" data-title="Kristal (unfinished)">
-                    <img loading="lazy" src="images/colorpencils/DSC00440.jpg" alt="Kristal (unfinished)">
-                    <div class="hover-text">Kristal (unfinished)</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00441.jpg" data-lightbox="Colorpencils" data-title="Cherry Lips &amp; Creams">
-                    <img loading="lazy" src="images/colorpencils/DSC00441.jpg" alt="Cherry Lips &amp; Creams">
-                    <div class="hover-text">Cherry Lips &amp; Creams</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00442.jpg" data-lightbox="Colorpencils" data-title="Donna Summers">
-                    <img loading="lazy" src="images/colorpencils/DSC00442.jpg" alt="Donna Summers">
-                    <div class="hover-text">Donna Summers</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00443.jpg" data-lightbox="Colorpencils" data-title="Apart in the Sky">
-                    <img loading="lazy" src="images/colorpencils/DSC00443.jpg" alt="Apart in the Sky">
-                    <div class="hover-text">Apart in the Sky</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/colorpencils/DSC00444.jpg" data-lightbox="Colorpencils" data-title="Prickly Pear Bloom">
-                    <img loading="lazy" src="images/colorpencils/DSC00444.jpg" alt="Prickly Pear Bloom">
-                    <div class="hover-text">Prickly Pear Bloom</div>
-                  </a>
-                </div>
-            </div>
-              <div class="showmore-wrap">
-                <button id="btn-more-colorpencils" class="button secondary">Show more</button>
-              </div>
-          </div>
-        </div>
+  <!-- WOOD BURNINGS -->
+  <div class="section-wrap" id="woodburnings">
+    <div class="section-header"><h2>Wood Burnings</h2></div>
+    <div class="art-grid" id="grid-woodburnings">
+      <div class="art-card"><a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1"><div class="art-card-img"><img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1"></div></a><div class="art-card-info"><div class="art-card-title">wood1</div><div class="art-card-meta">Wood Burning</div></div></div>
+      <div class="art-card"><a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2"><div class="art-card-img"><img loading="lazy" src="images/woodburnings/wood2.jpg" alt="wood2"></div></a><div class="art-card-info"><div class="art-card-title">wood2</div><div class="art-card-meta">Wood Burning</div></div></div>
+    </div>
+  </div>
 
-        <div class="modeB">
-          <div class="strip" id="strip-colorpencils">
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus">
-                    <img loading="lazy" src="images/colorpencils/DSC00427.jpg" alt="Goku Nimbus">
-                    <div class="hover-text">Goku Nimbus</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00428.jpg" data-lightbox="Colorpencils" data-title="Bunny Bow">
-                    <img loading="lazy" src="images/colorpencils/DSC00428.jpg" alt="Bunny Bow">
-                    <div class="hover-text">Bunny Bow</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00429.jpg" data-lightbox="Colorpencils" data-title="Galatic Sketch">
-                    <img loading="lazy" src="images/colorpencils/DSC00429.jpg" alt="Galatic Sketch">
-                    <div class="hover-text">Galatic Sketch</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00430.jpg" data-lightbox="Colorpencils" data-title="Lucid Spider">
-                    <img loading="lazy" src="images/colorpencils/DSC00430.jpg" alt="Lucid Spider">
-                    <div class="hover-text">Lucid Spider</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00431.jpg" data-lightbox="Colorpencils" data-title="Self Portrait">
-                    <img loading="lazy" src="images/colorpencils/DSC00431.jpg" alt="Self Portrait">
-                    <div class="hover-text">Self Portrait</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00432.jpg" data-lightbox="Colorpencils" data-title="All-Seeing Ladybug">
-                    <img loading="lazy" src="images/colorpencils/DSC00432.jpg" alt="All-Seeing Ladybug">
-                    <div class="hover-text">All-Seeing Ladybug</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00433.jpg" data-lightbox="Colorpencils" data-title="Nebula Forseeing">
-                    <img loading="lazy" src="images/colorpencils/DSC00433.jpg" alt="Nebula Forseeing">
-                    <div class="hover-text">Nebula Forseeing</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00434.jpg" data-lightbox="Colorpencils" data-title="Mushroom Guardian">
-                    <img loading="lazy" src="images/colorpencils/DSC00434.jpg" alt="Mushroom Guardian">
-                    <div class="hover-text">Mushroom Guardian</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00435.jpg" data-lightbox="Colorpencils" data-title="Eclipse of Desire">
-                    <img loading="lazy" src="images/colorpencils/DSC00435.jpg" alt="Eclipse of Desire">
-                    <div class="hover-text">Eclipse of Desire</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00436.jpg" data-lightbox="Colorpencils" data-title="Weeping Sunfloor">
-                    <img loading="lazy" src="images/colorpencils/DSC00436.jpg" alt="Weeping Sunfloor">
-                    <div class="hover-text">Weeping Sunfloor</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00437.jpg" data-lightbox="Colorpencils" data-title="Storm in the Heart">
-                    <img loading="lazy" src="images/colorpencils/DSC00437.jpg" alt="Storm in the Heart">
-                    <div class="hover-text">Storm in the Heart</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00438.jpg" data-lightbox="Colorpencils" data-title="Tucson on the Moon">
-                    <img loading="lazy" src="images/colorpencils/DSC00438.jpg" alt="Tucson on the Moon">
-                    <div class="hover-text">Tucson on the Moon</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00439.jpg" data-lightbox="Colorpencils" data-title="Refractions of Me">
-                    <img loading="lazy" src="images/colorpencils/DSC00439.jpg" alt="Refractions of Me">
-                    <div class="hover-text">Refractions of Me</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00440.jpg" data-lightbox="Colorpencils" data-title="Kristal (unfinished)">
-                    <img loading="lazy" src="images/colorpencils/DSC00440.jpg" alt="Kristal (unfinished)">
-                    <div class="hover-text">Kristal (unfinished)</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00441.jpg" data-lightbox="Colorpencils" data-title="Cherry Lips &amp; Creams">
-                    <img loading="lazy" src="images/colorpencils/DSC00441.jpg" alt="Cherry Lips &amp; Creams">
-                    <div class="hover-text">Cherry Lips &amp; Creams</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00442.jpg" data-lightbox="Colorpencils" data-title="Donna Summers">
-                    <img loading="lazy" src="images/colorpencils/DSC00442.jpg" alt="Donna Summers">
-                    <div class="hover-text">Donna Summers</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00443.jpg" data-lightbox="Colorpencils" data-title="Apart in the Sky">
-                    <img loading="lazy" src="images/colorpencils/DSC00443.jpg" alt="Apart in the Sky">
-                    <div class="hover-text">Apart in the Sky</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/colorpencils/DSC00444.jpg" data-lightbox="Colorpencils" data-title="Prickly Pear Bloom">
-                    <img loading="lazy" src="images/colorpencils/DSC00444.jpg" alt="Prickly Pear Bloom">
-                    <div class="hover-text">Prickly Pear Bloom</div>
-                  </a>
-                </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="crafts">
-        <div class="cat-header" data-panel="panel-crafts">
-          <h2>Crafts</h2>
-          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Crafts">&#x25BE;</button>
-          <div class="scroll-ctrls modeB-ctrl">
-            <button data-scroll="#strip-crafts" data-dir="left">&#x27F5;</button>
-            <button data-scroll="#strip-crafts" data-dir="right">&#x27F6;</button>
-          </div>
-        </div>
-
-        <div class="modeA">
-          <div class="cat-panel collapsed" id="panel-crafts">
-            <div class="grid" id="grid-crafts">
-                <div class="grid-item">
-                  <a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters">
-                    <img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters">
-                    <div class="hover-text">Mind and Hand of Still Waters</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1">
-                    <img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1">
-                    <div class="hover-text">craft1</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2">
-                    <img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2">
-                    <div class="hover-text">craft2</div>
-                  </a>
-                </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modeB">
-          <div class="strip" id="strip-crafts">
-                <div class="h-item">
-                  <a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters">
-                    <img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters">
-                    <div class="hover-text">Mind and Hand of Still Waters</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1">
-                    <img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1">
-                    <div class="hover-text">craft1</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2">
-                    <img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2">
-                    <div class="hover-text">craft2</div>
-                  </a>
-                </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="woodburnings">
-        <div class="cat-header" data-panel="panel-woodburnings">
-          <h2>Woodburnings</h2>
-          <button class="cat-chevron modeA-ctrl" aria-label="Toggle Woodburnings">&#x25BE;</button>
-          <div class="scroll-ctrls modeB-ctrl">
-            <button data-scroll="#strip-woodburnings" data-dir="left">&#x27F5;</button>
-            <button data-scroll="#strip-woodburnings" data-dir="right">&#x27F6;</button>
-          </div>
-        </div>
-
-        <div class="modeA">
-          <div class="cat-panel collapsed" id="panel-woodburnings">
-            <div class="grid" id="grid-woodburnings">
-                <div class="grid-item">
-                  <a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1">
-                    <img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1">
-                    <div class="hover-text">wood1</div>
-                  </a>
-                </div>
-                <div class="grid-item">
-                  <a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2">
-                    <img loading="lazy" src="images/woodburnings/wood2.jpg" alt="wood2">
-                    <div class="hover-text">wood2</div>
-                  </a>
-                </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modeB">
-          <div class="strip" id="strip-woodburnings">
-                <div class="h-item">
-                  <a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1">
-                    <img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1">
-                    <div class="hover-text">wood1</div>
-                  </a>
-                </div>
-                <div class="h-item">
-                  <a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2">
-                    <img loading="lazy" src="images/woodburnings/wood2.jpg" alt="wood2">
-                    <div class="hover-text">wood2</div>
-                  </a>
-                </div>
-          </div>
-        </div>
-      </section>
-  </main>
-
-  <footer id="contact" style="text-align:center;padding:24px 16px;background:#1c1c1c;border-top:1px solid var(--line)">
+  <footer id="contact">
     <h2>Contact</h2>
-    <p>If you&#39;re interested in any piece, send an email to: <a href="mailto:sydkellyart@gmail.com" style="color:#ff69b4"><strong>sydkellyart@gmail.com</strong></a></p>
-    <p>Instagram: <a href="https://instagram.com/dizzy.cult" target="_blank" rel="noopener" style="color:#ff69b4"><strong>@dizzy.cult</strong></a></p>
+    <p>If you&#39;re interested in any piece, reach out:</p>
+    <p style="margin-top:12px"><a href="mailto:sydkellyart@gmail.com">sydkellyart@gmail.com</a></p>
+    <p style="margin-top:8px"><a href="https://instagram.com/dizzy.cult" target="_blank" rel="noopener">@dizzy.cult</a> on Instagram</p>
   </footer>
+
+  <div class="site-footer">
+    &copy; 2026 Dizzy Cult LLC&#8482;. All rights reserved. All artwork by Sydney Kelly.&nbsp;&nbsp;
+    <a href="terms.html">Terms of Use</a> &nbsp;|&nbsp;
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
   <script>
-    function setStickyVar() {
-      const bar = document.getElementById('stickyNav');
-      if (bar) document.documentElement.style.setProperty('--sticky-h', Math.ceil(bar.getBoundingClientRect().height) + 'px');
-    }
-    window.addEventListener('load', setStickyVar);
-    window.addEventListener('resize', setStickyVar);
+    if (window.lightbox) lightbox.option({ albumLabel: 'Image %1 of %2', fadeDuration: 200, resizeDuration: 200 });
 
-    if (window.lightbox) lightbox.option({ albumLabel: "Image %1 of %2", fadeDuration: 200, resizeDuration: 200 });
-
-    const root = document.body;
-    const btnA = document.getElementById('btnModeA');
-    const btnB = document.getElementById('btnModeB');
-    if (localStorage.getItem('aos_mode') === 'B') setMode('B'); else setMode('A');
-    btnA.addEventListener('click', () => setMode('A'));
-    btnB.addEventListener('click', () => setMode('B'));
-    function setMode(m) {
-      root.setAttribute('data-mode', m);
-      btnA.classList.toggle('active', m === 'A');
-      btnB.classList.toggle('active', m === 'B');
-      localStorage.setItem('aos_mode', m);
-    }
-
-    const _smGrids = ['grid-watercolors', 'grid-colorpencils'].map(id => document.getElementById(id)).filter(Boolean);
-    const _smBtns  = ['btn-more-watercolors', 'btn-more-colorpencils'].map(id => document.getElementById(id)).filter(Boolean);
-    const _smHad   = _smGrids.map(g => g.hasAttribute('data-limit'));
-
-
-    const q = document.getElementById('searchGlobal');
-    if (q) {
-      q.addEventListener('input', () => {
-        const term = q.value.trim().toLowerCase();
-        const searching = term.length > 0;
-
-        _smGrids.forEach((g, i) => {
-          if (searching) {
-            g.removeAttribute('data-limit');
-            if (_smBtns[i]) _smBtns[i].style.display = 'none';
-          } else {
-            if (_smHad[i]) g.setAttribute('data-limit', '');
-            if (_smBtns[i]) _smBtns[i].style.display = '';
-          }
-        });
-
-        document.querySelectorAll('.grid-item, .h-item').forEach(it => {
-          const text = (it.querySelector('img')?.alt || '').toLowerCase();
-          it.style.display = searching ? (text.includes(term) ? '' : 'none') : '';
-        });
-
-        if (searching) {
-          document.querySelectorAll('.cat-panel.collapsed').forEach(p => p.classList.remove('collapsed'));
-        }
-      });
-    }
-
-    const _gwatercolors = document.getElementById('grid-watercolors');
-    const _bwatercolors = document.getElementById('btn-more-watercolors');
-    if (_bwatercolors && _gwatercolors) {
-      _bwatercolors.addEventListener('click', () => {
-        _gwatercolors.removeAttribute('data-limit');
-        _bwatercolors.style.display = 'none';
-      });
-    }
-    const _gcolorpencils = document.getElementById('grid-colorpencils');
-    const _bcolorpencils = document.getElementById('btn-more-colorpencils');
-    if (_bcolorpencils && _gcolorpencils) {
-      _bcolorpencils.addEventListener('click', () => {
-        _gcolorpencils.removeAttribute('data-limit');
-        _bcolorpencils.style.display = 'none';
-      });
-    }
-
-    // Toggle panels in Mode A
-    document.querySelectorAll('.cat-header').forEach(hdr => {
-      hdr.addEventListener('click', e => {
-        if (e.target.closest('.scroll-ctrls')) return;
-        if (document.body.dataset.mode !== 'A') return;
-        const panel = document.getElementById(hdr.dataset.panel);
-        if (!panel) return;
-        panel.classList.toggle('collapsed');
-        hdr.classList.toggle('open');
-      });
-    });
-
-    // Scroll buttons (Mode B)
-    document.querySelectorAll('[data-scroll]').forEach(btn => {
+    // Show more
+    function setupShowMore(gridId, btnId, wrapId) {
+      const grid = document.getElementById(gridId);
+      const btn  = document.getElementById(btnId);
+      const wrap = document.getElementById(wrapId);
+      if (!grid || !btn) return;
       btn.addEventListener('click', () => {
-        const el = document.querySelector(btn.getAttribute('data-scroll'));
-        if (!el) return;
-        el.scrollBy({ left: el.clientWidth * 0.8 * (btn.getAttribute('data-dir') === 'right' ? 1 : -1), behavior: 'smooth' });
+        grid.classList.add('expanded');
+        grid.removeAttribute('data-limit');
+        wrap.style.display = 'none';
+      });
+    }
+    setupShowMore('grid-watercolors',  'btn-more-watercolors',  'wrap-more-watercolors');
+    setupShowMore('grid-colorpencils', 'btn-more-colorpencils', 'wrap-more-colorpencils');
+
+    // Search
+    const q = document.getElementById('searchGlobal');
+    const allGrids = ['grid-canvases','grid-watercolors','grid-colorpencils','grid-crafts','grid-woodburnings'].map(id => document.getElementById(id)).filter(Boolean);
+    const limitedGrids = ['grid-watercolors','grid-colorpencils'];
+
+    q.addEventListener('input', () => {
+      const term = q.value.trim().toLowerCase();
+      const searching = term.length > 0;
+
+      if (searching) {
+        limitedGrids.forEach(id => {
+          const g = document.getElementById(id);
+          if (g) { g.classList.add('expanded'); g.removeAttribute('data-limit'); }
+        });
+        document.getElementById('wrap-more-watercolors').style.display  = 'none';
+        document.getElementById('wrap-more-colorpencils').style.display = 'none';
+      }
+
+      allGrids.forEach(grid => {
+        grid.querySelectorAll('.art-card').forEach(card => {
+          const title = (card.querySelector('img')?.alt || '').toLowerCase();
+          const meta  = (card.querySelector('.art-card-meta')?.textContent || '').toLowerCase();
+          card.style.display = searching ? (title.includes(term) || meta.includes(term) ? '' : 'none') : '';
+        });
       });
     });
   </script>
-
-  <footer style="text-align:center;padding:28px 16px;background:#1c1c1c;border-top:1px solid #2f2f2f;margin-top:40px;font-size:0.85rem;color:#555">
-    &copy; 2026 Dizzy Cult LLC&#8482;. All rights reserved. All artwork by Sydney Kelly Paeres.<br>
-    Unauthorized reproduction or commercial use is prohibited.&nbsp;&nbsp;
-    <a href="terms.html" style="color:#ff69b4;text-decoration:none">Terms of Use</a> &nbsp;|&nbsp;
-    <a href="privacy.html" style="color:#ff69b4;text-decoration:none">Privacy Policy</a>
-  </footer>
 </body>
 </html>
