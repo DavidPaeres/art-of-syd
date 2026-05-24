@@ -126,6 +126,26 @@
     .site-footer a { color: #777; text-decoration: none; margin: 0 8px; }
     .site-footer a:hover { color: #ccc; }
 
+    /* WIDE CARD — spans 2 grid columns for horizontal/rectangular images */
+    .art-card-wide {
+      grid-column: span 2;
+    }
+    .art-card-wide .art-card-img {
+      aspect-ratio: 2 / 1;
+    }
+
+    /* TALL CARD — spans 2 grid rows for vertical images */
+    .art-card-tall {
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+    }
+    .art-card-tall .art-card-img {
+      aspect-ratio: unset;
+      flex: 1;
+      min-height: 0;
+    }
+
     @media(max-width: 900px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
@@ -134,6 +154,8 @@
       .section-divider { margin-left: 20px; margin-right: 20px; }
       .hero h1 { font-size: 2.8rem; }
       .quote-strip { padding: 48px 20px; }
+      .art-card-tall { grid-row: auto; display: block; }
+      .art-card-tall .art-card-img { aspect-ratio: 1; flex: unset; }
     }
     @media(max-width: 480px) {
       .art-grid { grid-template-columns: 1fr; }
@@ -180,11 +202,11 @@
     <div class="art-grid" id="grid-canvases">
       <div class="art-card"><a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden"></div></a><div class="art-card-info"><div class="art-card-title">Flourescent Garden</div><div class="art-card-meta">Canvas</div></div></div>
       <div class="art-card"><a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy"></div></a><div class="art-card-info"><div class="art-card-title">Whispers in the Canopy</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card"><a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo"></div></a><div class="art-card-info"><div class="art-card-title">La Garita del Diablo</div><div class="art-card-meta">Canvas &nbsp;·&nbsp; Sold</div></div></div>
+      <div class="art-card art-card-tall"><a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness"></div></a><div class="art-card-info"><div class="art-card-title">Sunset Madness</div><div class="art-card-meta">Canvas</div></div></div>
       <div class="art-card"><a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery"></div></a><div class="art-card-info"><div class="art-card-title">Gatepass Cemetery</div><div class="art-card-meta">Canvas</div></div></div>
       <div class="art-card"><a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon"></div></a><div class="art-card-info"><div class="art-card-title">Sedona Moon</div><div class="art-card-meta">Canvas</div></div></div>
       <div class="art-card"><a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight"></div></a><div class="art-card-info"><div class="art-card-title">Shell of Sight</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card"><a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness"></div></a><div class="art-card-info"><div class="art-card-title">Sunset Madness</div><div class="art-card-meta">Canvas</div></div></div>
+      <div class="art-card art-card-wide"><a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo"></div></a><div class="art-card-info"><div class="art-card-title">La Garita del Diablo</div><div class="art-card-meta">Canvas &nbsp;·&nbsp; Sold</div></div></div>
     </div>
   </div>
 

@@ -1,62 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>About Me - Art made by Sydney</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>About the Artist — Art Made by Sydney</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #111; color: #fff; }
-    header { text-align: center; padding: 40px 20px; background: #222; }
-    h1 { font-size: 2.5em; }
-    p.subtitle { font-size: 1.2em; color: #ccc; }
-    a.button { display: inline-block; padding: 10px 20px; background: #ff69b4; color: #fff; text-decoration: none; border-radius: 5px; margin: 5px; }
-    main { padding: 40px 20px; max-width: 800px; margin: auto; }
-    .artist-photo { width: 80vw; max-width: 450px; aspect-ratio: 1 / 1;  border-radius: 50%; object-fit: cover; margin-top: -70px; margin-bottom: -10px; }
-    footer { text-align: center; padding: 20px; background: #222; margin-top: 40px; }
+    :root {
+      --bg: #ffffff;
+      --surface: #f7f7f7;
+      --border: #e0e0e0;
+      --ink: #1a1a1a;
+      --muted: #888;
+      --radius: 2px;
+      --maxw: 1320px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px; border-bottom: 1px solid var(--border);
+      background: #fff; position: sticky; top: 0; z-index: 200;
+    }
+    .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-right { display: flex; gap: 20px; align-items: center; }
+    .nav-right a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-right a:hover { color: var(--ink); }
+
+    /* HERO */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero {
+      position: relative; min-height: 420px;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      text-align: center; overflow: hidden; padding-bottom: 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('images/hero_bg1.jpeg') center center / cover no-repeat;
+      filter: brightness(.45); z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; padding: 0 20px; }
+    .hero-eyebrow {
+      font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(255,255,255,.7); margin-bottom: 16px;
+      opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: .4s;
+    }
+    .hero h1 {
+      font-size: 3.2rem; font-weight: 200; letter-spacing: .12em;
+      text-transform: uppercase; color: #fff; line-height: 1;
+      opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: .7s;
+    }
+
+    /* PROFILE PHOTO */
+    .profile-wrap {
+      display: flex; justify-content: center;
+      margin-top: -64px; margin-bottom: 48px; position: relative; z-index: 10;
+    }
+    .profile-wrap img {
+      width: 128px; height: 128px; border-radius: 50%; object-fit: cover;
+      border: 4px solid #fff; box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    }
+
+    /* CONTENT */
+    .content-wrap {
+      max-width: 760px; margin: 0 auto; padding: 0 48px 80px;
+    }
+    .content-section { margin-bottom: 56px; }
+    .content-section h2 {
+      font-size: .82rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+      border-bottom: 2px solid var(--ink); padding-bottom: 6px; margin-bottom: 24px;
+      display: inline-block;
+    }
+    .content-section p {
+      font-size: .96rem; line-height: 1.8; color: var(--ink);
+      margin-bottom: 16px; font-weight: 300;
+    }
+    .content-section p:last-child { margin-bottom: 0; }
+    .content-section em { font-style: italic; }
+
+    /* CONTACT / FOOTER */
+    #contact { background: var(--ink); color: #ccc; padding: 64px 48px; text-align: center; margin-top: 0; }
+    #contact h2 { font-size: .82rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #fff; margin-bottom: 20px; }
+    #contact p { margin-bottom: 10px; font-size: .9rem; }
+    #contact a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); transition: border-color .2s; }
+    #contact a:hover { border-color: #fff; }
+
+    .site-footer { background: var(--ink); color: #555; padding: 24px 48px; text-align: center; font-size: .75rem; letter-spacing: .05em; border-top: 1px solid #2a2a2a; }
+    .site-footer a { color: #777; text-decoration: none; margin: 0 8px; }
+    .site-footer a:hover { color: #ccc; }
+
+    @media(max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .content-wrap { padding: 0 20px 60px; }
+      .hero h1 { font-size: 2.2rem; }
+    }
   </style>
 </head>
 <body>
-<header>
-  <h1>About the Artist</h1>
-  <p class="subtitle">A glimpse into my world</p>
-  <a class="button" href="index.html">Home</a>
-  <a class="button" href="#contact">Contact</a>
-</header>
 
-<main>
-  <div style="text-align:center;">
-    <img src="images/profilePic.jpg" alt="Artist Photo" class="artist-photo">
-    <h2>Sydney Kelly Paeres</h2>
+  <nav>
+    <a href="index.html" class="nav-logo">Dizzy Cult LLC</a>
+    <ul class="nav-links">
+      <li><a href="index.html#canvases">Canvases</a></li>
+      <li><a href="index.html#watercolors">Watercolors</a></li>
+      <li><a href="index.html#colorpencils">Color Pencils</a></li>
+      <li><a href="index.html#crafts">Crafts</a></li>
+      <li><a href="index.html#woodburnings">Wood Burnings</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="about.html" style="color: var(--ink);">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <header class="hero" aria-label="About the artist">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">The artist behind the work</p>
+      <h1>Sydney Kelly<br>Paeres</h1>
+    </div>
+  </header>
+
+  <div class="profile-wrap">
+    <img src="images/profilePic.jpg" alt="Sydney Kelly Paeres" />
   </div>
 
-  <section id="biography">
-    <h3>Biography</h3>
-    <p>Born in New Jersey in 1997 to a Puerto Rican father and Costa Rican mother, Sydney grew up surrounded by two rich cultures that continue to shape her creative voice. Her childhood love for drawing evolved into a lifelong passion, nurtured by the vibrant traditions of Puerto Rico, the natural beauty of Costa Rica, and later the vast desert landscapes of Tucson, Arizona, where she has lived since 2023.</p>
-    <p>Largely self-taught, Sydney also earned an associate’s degree in Graphic Design, refining her sense of composition and visual balance. In 2018, while living in Puerto Rico, she became a certified artisan in pyrography (woodburning), a practice that deepened her connection to cultural heritage and nature-inspired craftsmanship. Though she also holds a professional pastry certification, her heart has always belonged to painting and drawing.</p>
-    <p>Her work blends surrealism with whimsical, dreamlike imagery, often featuring bold colors and motifs inspired by tropical forests, flora, and fauna. Using watercolors, acrylics, and colored pencils, she creates pieces that feel at once imaginative and deeply personal. Themes of joy, spontaneity, and interconnectedness run through her art, embodied in the Costa Rican expression <em>“Pura Vida!”</em>—a celebration of life’s vibrancy and a reminder to live with gratitude.</p>
-    <p>Now based in Tucson with her partner, an aerospace engineer she met in Puerto Rico, Sydney continues to explore new directions while staying true to her distinctive style. Her aspiration is clear: to grow as a professional artist while maintaining the unique voice that celebrates her cultural roots and her profound love of nature.</p>
-  </section>
+  <div class="content-wrap">
 
-  <section id="artist-statement">
-    <h3>Artist Statement</h3>
-    <p>My colorful paintings are born from a place of both struggle and liberation. I was raised in a strict, cult-like environment where creativity was discouraged. When I tried to create, I was often reprimanded by the adults around me. Modesty and conservatism were over-enforced, and art was expected to be literal and restrained. As I grew older, however, I began to experiment with color and form, pushing against those limitations.</p>
-    <p>Two recurring symbols often appear in my work: eyes and mushrooms. Eyes represent both judgment and freedom. Growing up under constant watch, I became familiar with the feeling of being observed and evaluated. Yet in my paintings, eyes no longer judge—they keep me company. They are surreal companions, playful and strange, transforming something once oppressive into a source of empowerment.</p>
-    <p>Mushrooms, on the other hand, fascinate me for their contradictions. Their form is simple and instantly recognizable, yet they are often associated with toxicity or danger. To me, they symbolize resilience—like something sprouting or blooming despite unfavorable conditions. At the same time, their psychedelic associations connect naturally with my surrealist style, allowing me to explore themes of color, fantasy, and altered perception. Sometimes I paint them alongside eyes, sometimes on their own, but together they create a dialogue of transformation and wonder.</p>
-    <p>Nature has also been a constant inspiration. During my years in Costa Rica, I marveled at toucans and quetzals, convinced they looked as if drawn by a child with crayons. That sense of wonder continues to guide me today.</p>
-    <p>Through my art, I hope to remind others that creation does not need to be logical.<br> Joy, imagination, and self-expression are reasons enough.</p>
-  </section>
-  
-</main>
+    <div class="content-section">
+      <h2>Biography</h2>
+      <p>Born in New Jersey in 1997 to a Puerto Rican father and Costa Rican mother, Sydney grew up surrounded by two rich cultures that continue to shape her creative voice. Her childhood love for drawing evolved into a lifelong passion, nurtured by the vibrant traditions of Puerto Rico, the natural beauty of Costa Rica, and later the vast desert landscapes of Tucson, Arizona, where she has lived since 2023.</p>
+      <p>Largely self-taught, Sydney also earned an associate's degree in Graphic Design, refining her sense of composition and visual balance. In 2018, while living in Puerto Rico, she became a certified artisan in pyrography (woodburning), a practice that deepened her connection to cultural heritage and nature-inspired craftsmanship. Though she also holds a professional pastry certification, her heart has always belonged to painting and drawing.</p>
+      <p>Her work blends surrealism with whimsical, dreamlike imagery, often featuring bold colors and motifs inspired by tropical forests, flora, and fauna. Using watercolors, acrylics, and colored pencils, she creates pieces that feel at once imaginative and deeply personal. Themes of joy, spontaneity, and interconnectedness run through her art, embodied in the Costa Rican expression <em>"Pura Vida!"</em> — a celebration of life's vibrancy and a reminder to live with gratitude.</p>
+      <p>Now based in Tucson with her partner, an aerospace engineer she met in Puerto Rico, Sydney continues to explore new directions while staying true to her distinctive style. Her aspiration is clear: to grow as a professional artist while maintaining the unique voice that celebrates her cultural roots and her profound love of nature.</p>
+    </div>
 
-<footer id="contact">
-  <h2>Contact</h2>
-  <p>If you're interested in any piece, send an email to: <a href="mailto:sydkellyart@gmail.com" style="color:#ff69b4"><strong>sydkellyart@gmail.com</strong></a></p>
-  <p>Instagram: <a href="https://instagram.com/dizzy.cult" target="_blank" rel="noopener" style="color:#ff69b4"><strong>@dizzy.cult</strong></a></p>
-  <p style="margin-top:24px;font-size:0.82rem;color:#555">
-    &copy; 2026 Dizzy Cult LLC&#8482;. All rights reserved. All artwork by Sydney Kelly Paeres.<br>
-    <a href="terms.html" style="color:#ff69b4;text-decoration:none">Terms of Use</a> &nbsp;|&nbsp;
-    <a href="privacy.html" style="color:#ff69b4;text-decoration:none">Privacy Policy</a>
-  </p>
-</footer>
+    <div class="content-section">
+      <h2>Artist Statement</h2>
+      <p>My colorful paintings are born from a place of both struggle and liberation. I was raised in a strict, cult-like environment where creativity was discouraged. When I tried to create, I was often reprimanded by the adults around me. Modesty and conservatism were over-enforced, and art was expected to be literal and restrained. As I grew older, however, I began to experiment with color and form, pushing against those limitations.</p>
+      <p>Two recurring symbols often appear in my work: eyes and mushrooms. Eyes represent both judgment and freedom. Growing up under constant watch, I became familiar with the feeling of being observed and evaluated. Yet in my paintings, eyes no longer judge — they keep me company. They are surreal companions, playful and strange, transforming something once oppressive into a source of empowerment.</p>
+      <p>Mushrooms, on the other hand, fascinate me for their contradictions. Their form is simple and instantly recognizable, yet they are often associated with toxicity or danger. To me, they symbolize resilience — like something sprouting or blooming despite unfavorable conditions. At the same time, their psychedelic associations connect naturally with my surrealist style, allowing me to explore themes of color, fantasy, and altered perception.</p>
+      <p>Nature has also been a constant inspiration. During my years in Costa Rica, I marveled at toucans and quetzals, convinced they looked as if drawn by a child with crayons. That sense of wonder continues to guide me today.</p>
+      <p>Through my art, I hope to remind others that creation does not need to be logical. Joy, imagination, and self-expression are reasons enough.</p>
+    </div>
+
+  </div>
+
+  <footer id="contact">
+    <h2>Contact</h2>
+    <p>If you&#39;re interested in any piece, reach out:</p>
+    <p style="margin-top:12px"><a href="mailto:sydkellyart@gmail.com">sydkellyart@gmail.com</a></p>
+    <p style="margin-top:8px"><a href="https://instagram.com/dizzy.cult" target="_blank" rel="noopener">@dizzy.cult</a> on Instagram</p>
+  </footer>
+
+  <div class="site-footer">
+    &copy; 2026 Dizzy Cult LLC&#8482;. All rights reserved. All artwork by Sydney Kelly.&nbsp;&nbsp;
+    <a href="terms.html">Terms of Use</a> &nbsp;|&nbsp;
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+
 </body>
 </html>

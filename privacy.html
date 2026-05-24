@@ -1,99 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Privacy Policy — Art made by Sydney</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Privacy Policy — Art Made by Sydney</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root { --bg:#111; --panel:#1c1c1c; --ink:#fff; --muted:#bbb; --accent:#ff69b4; --line:#2f2f2f; }
-    * { box-sizing: border-box; }
-    body { font-family: Arial, system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--ink); }
-    header { text-align: center; padding: 36px 20px 28px; background: var(--panel); border-bottom: 1px solid var(--line); }
-    header h1 { margin: 0 0 8px; font-size: 2rem; }
-    header p { color: var(--muted); margin: 0 0 16px; }
-    a.button { display: inline-block; padding: 9px 20px; background: var(--accent); color: #000; text-decoration: none; border-radius: 999px; font-weight: 700; font-size: 0.9rem; }
-    main { max-width: 780px; margin: 0 auto; padding: 40px 20px 60px; }
-    h2 { color: var(--accent); font-size: 1.15rem; margin-top: 36px; }
-    p, li { color: var(--muted); line-height: 1.7; }
-    ul { padding-left: 20px; }
-    .effective { font-size: 0.85rem; color: #666; margin-top: 48px; }
-    footer { text-align: center; padding: 20px; background: var(--panel); border-top: 1px solid var(--line); font-size: 0.85rem; color: #555; }
-    footer a { color: var(--accent); text-decoration: none; }
+    :root {
+      --bg: #ffffff;
+      --surface: #f7f7f7;
+      --border: #e0e0e0;
+      --ink: #1a1a1a;
+      --muted: #888;
+      --radius: 2px;
+      --maxw: 1320px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Helvetica Neue', Arial, sans-serif; }
+
+    /* NAV */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px; border-bottom: 1px solid var(--border);
+      background: #fff; position: sticky; top: 0; z-index: 200;
+    }
+    .nav-logo { font-size: .9rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-right { display: flex; gap: 20px; align-items: center; }
+    .nav-right a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
+    .nav-right a:hover { color: var(--ink); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 64px 48px 40px;
+      max-width: 760px; margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header p.back {
+      font-size: .72rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .page-header p.back a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    .page-header p.back a:hover { color: var(--ink); }
+    .page-header h1 {
+      font-size: 2rem; font-weight: 200; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--ink); line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .page-header p.sub { font-size: .78rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+
+    /* CONTENT */
+    .content-wrap { max-width: 760px; margin: 0 auto; padding: 48px 48px 80px; }
+    .content-section { margin-bottom: 40px; }
+    .content-section h2 {
+      font-size: .78rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+      border-bottom: 2px solid var(--ink); padding-bottom: 5px; margin-bottom: 16px;
+      display: inline-block;
+    }
+    .content-section p { font-size: .93rem; line-height: 1.8; color: var(--ink); margin-bottom: 12px; font-weight: 300; }
+    .content-section p:last-child { margin-bottom: 0; }
+    .content-section ul { padding-left: 20px; margin-bottom: 12px; }
+    .content-section li { font-size: .93rem; line-height: 1.8; color: var(--ink); font-weight: 300; margin-bottom: 6px; }
+    .content-section a { color: var(--ink); }
+    .effective { font-size: .78rem; color: var(--muted); letter-spacing: .06em; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
+
+    /* CONTACT / FOOTER */
+    #contact { background: var(--ink); color: #ccc; padding: 64px 48px; text-align: center; }
+    #contact h2 { font-size: .82rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #fff; margin-bottom: 20px; }
+    #contact p { margin-bottom: 10px; font-size: .9rem; }
+    #contact a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.3); transition: border-color .2s; }
+    #contact a:hover { border-color: #fff; }
+    .site-footer { background: var(--ink); color: #555; padding: 24px 48px; text-align: center; font-size: .75rem; letter-spacing: .05em; border-top: 1px solid #2a2a2a; }
+    .site-footer a { color: #777; text-decoration: none; margin: 0 8px; }
+    .site-footer a:hover { color: #ccc; }
+
+    @media(max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .page-header, .content-wrap { padding-left: 20px; padding-right: 20px; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Privacy Policy</h1>
-  <p>dizzycult.com — operated by Dizzy Cult LLC</p>
-  <a class="button" href="index.html">← Back to Gallery</a>
-</header>
+  <nav>
+    <a href="index.html" class="nav-logo">Dizzy Cult LLC</a>
+    <ul class="nav-links">
+      <li><a href="index.html#canvases">Canvases</a></li>
+      <li><a href="index.html#watercolors">Watercolors</a></li>
+      <li><a href="index.html#colorpencils">Color Pencils</a></li>
+      <li><a href="index.html#crafts">Crafts</a></li>
+      <li><a href="index.html#woodburnings">Wood Burnings</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-<main>
+  <div class="page-header">
+    <p class="back"><a href="index.html">← Back to Gallery</a></p>
+    <h1>Privacy Policy</h1>
+    <p class="sub">dizzycult.com — operated by Dizzy Cult LLC</p>
+  </div>
 
-  <h2>1. Who We Are</h2>
-  <p>
-    This website, <strong>dizzycult.com</strong> (also accessible at <strong>artofsyd.com</strong>), is owned and operated by <strong>Dizzy Cult LLC</strong>.
-    It serves as the online portfolio of artist Sydney Kelly Paeres.
-    For any privacy-related questions, contact us at
-    <a href="mailto:sydkellyart@gmail.com" style="color:var(--accent)">sydkellyart@gmail.com</a>.
-  </p>
+  <div class="content-wrap">
 
-  <h2>2. Information We Collect</h2>
-  <p>This is a portfolio website. We do not run accounts, checkouts, or user logins. The only information we may receive is:</p>
-  <ul>
-    <li><strong>Contact emails:</strong> If you email us directly, we receive your email address and message content.</li>
-    <li><strong>Analytics data:</strong> If analytics tools (e.g. Google Analytics) are enabled, they may collect anonymized browsing data such as page views, device type, and general location. No personally identifiable information is stored by us.</li>
-  </ul>
+    <div class="content-section">
+      <h2>1. Who We Are</h2>
+      <p>This website, <strong>dizzycult.com</strong>, is owned and operated by <strong>Dizzy Cult LLC</strong>. It serves as the online portfolio of artist Sydney Kelly Paeres. For any privacy-related questions, contact us at <a href="mailto:sydkellyart@gmail.com">sydkellyart@gmail.com</a>.</p>
+    </div>
 
-  <h2>3. How We Use Your Information</h2>
-  <ul>
-    <li>To respond to inquiries about artwork, commissions, or licensing.</li>
-    <li>To understand how visitors use the site so we can improve it.</li>
-  </ul>
-  <p>We do <strong>not</strong> sell, trade, or share your personal information with third parties for marketing purposes.</p>
+    <div class="content-section">
+      <h2>2. Information We Collect</h2>
+      <p>This is a portfolio website. We do not run accounts, checkouts, or user logins. The only information we may receive is:</p>
+      <ul>
+        <li><strong>Contact emails:</strong> If you email us directly, we receive your email address and message content.</li>
+        <li><strong>Analytics data:</strong> If analytics tools are enabled, they may collect anonymized browsing data such as page views, device type, and general location. No personally identifiable information is stored by us.</li>
+      </ul>
+    </div>
 
-  <h2>4. Cookies</h2>
-  <p>
-    This site may use cookies for analytics purposes only. You can disable cookies in your browser settings at any time.
-    Disabling cookies will not affect your ability to view the gallery.
-  </p>
+    <div class="content-section">
+      <h2>3. How We Use Your Information</h2>
+      <ul>
+        <li>To respond to inquiries about artwork, commissions, or licensing.</li>
+        <li>To understand how visitors use the site so we can improve it.</li>
+      </ul>
+      <p>We do <strong>not</strong> sell, trade, or share your personal information with third parties for marketing purposes.</p>
+    </div>
 
-  <h2>5. Third-Party Links</h2>
-  <p>
-    This site may contain links to external platforms. We are not responsible for the privacy practices of those sites.
-    Please review their privacy policies independently.
-  </p>
+    <div class="content-section">
+      <h2>4. Cookies</h2>
+      <p>This site may use cookies for analytics purposes only. You can disable cookies in your browser settings at any time. Disabling cookies will not affect your ability to view the gallery.</p>
+    </div>
 
-  <h2>6. Data Retention</h2>
-  <p>
-    Emails you send us are retained only as long as necessary to respond to your inquiry.
-    We do not maintain marketing lists or databases of visitor information.
-  </p>
+    <div class="content-section">
+      <h2>5. Third-Party Links</h2>
+      <p>This site may contain links to external platforms. We are not responsible for the privacy practices of those sites. Please review their privacy policies independently.</p>
+    </div>
 
-  <h2>7. Your Rights</h2>
-  <p>
-    Depending on your location, you may have rights under applicable privacy laws (including CCPA for California residents
-    and GDPR for EU residents) to access, correct, or request deletion of any personal data we hold about you.
-    To exercise these rights, contact us at
-    <a href="mailto:sydkellyart@gmail.com" style="color:var(--accent)">sydkellyart@gmail.com</a>.
-  </p>
+    <div class="content-section">
+      <h2>6. Data Retention</h2>
+      <p>Emails you send us are retained only as long as necessary to respond to your inquiry. We do not maintain marketing lists or databases of visitor information.</p>
+    </div>
 
-  <h2>8. Changes to This Policy</h2>
-  <p>
-    We may update this Privacy Policy from time to time. The effective date below will reflect any changes.
-    Continued use of the site after changes constitutes acceptance of the updated policy.
-  </p>
+    <div class="content-section">
+      <h2>7. Your Rights</h2>
+      <p>Depending on your location, you may have rights under applicable privacy laws (including CCPA for California residents and GDPR for EU residents) to access, correct, or request deletion of any personal data we hold about you. To exercise these rights, contact us at <a href="mailto:sydkellyart@gmail.com">sydkellyart@gmail.com</a>.</p>
+    </div>
 
-  <p class="effective">Effective date: May 3, 2026 &nbsp;|&nbsp; Dizzy Cult LLC</p>
+    <div class="content-section">
+      <h2>8. Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. The effective date below will reflect any changes. Continued use of the site after changes constitutes acceptance of the updated policy.</p>
+    </div>
 
-</main>
+    <p class="effective">Effective date: May 3, 2026 &nbsp;·&nbsp; Dizzy Cult LLC</p>
 
-<footer>
-  &copy; 2026 Dizzy Cult LLC. All rights reserved. &nbsp;&nbsp;
-  <a href="terms.html">Terms of Use</a> &nbsp;|&nbsp;
-  <a href="index.html">Gallery</a>
-</footer>
+  </div>
+
+  <footer id="contact">
+    <h2>Contact</h2>
+    <p>If you&#39;re interested in any piece, reach out:</p>
+    <p style="margin-top:12px"><a href="mailto:sydkellyart@gmail.com">sydkellyart@gmail.com</a></p>
+    <p style="margin-top:8px"><a href="https://instagram.com/dizzy.cult" target="_blank" rel="noopener">@dizzy.cult</a> on Instagram</p>
+  </footer>
+
+  <div class="site-footer">
+    &copy; 2026 Dizzy Cult LLC&#8482;. All rights reserved. All artwork by Sydney Kelly.&nbsp;&nbsp;
+    <a href="terms.html">Terms of Use</a> &nbsp;|&nbsp;
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
 
 </body>
 </html>
