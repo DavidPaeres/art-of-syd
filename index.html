@@ -283,7 +283,7 @@
       <div class="art-card" data-full="images/canvas/DSC00552.JPG" data-title="Gatepass Cemetery" onclick="openArtModal(this)">
         <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery" class="lb-trigger"></a>
         <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00552.jpg" alt="Gatepass Cemetery" onerror="this.onerror=null;this.src='images/canvas/DSC00552.JPG'"></div>
-        <div class="art-card-info"><div class="art-card-title">Gatepass Cemetery</div><div class="art-card-meta">Canvas</div></div>
+        <div class="art-card-info"><div class="art-card-title">Gatepass Cemetery</div><div class="art-card-meta">Canvas &nbsp;·&nbsp; Sold</div></div>
       </div>
 
       <div class="art-card" data-full="images/canvas/DSC00553.JPG" data-title="Sedona Moon" onclick="openArtModal(this)">
@@ -669,8 +669,8 @@
       <button class="art-modal-close" id="artModalClose">&#215;</button>
       <h3 id="artModalTitle"></h3>
       <div class="art-modal-btns">
-        <button class="btn-modal-view" id="artModalView">View Full Size</button>
-        <a class="btn-modal-merch" id="artModalMerch" href="#">Shop Merch</a>
+        <a class="btn-modal-view" id="artModalView" href="#" target="_blank" rel="noopener">View Full Size</a>
+        <a class="btn-modal-merch" id="artModalMerch" href="#">Shop Merch with this art</a>
       </div>
     </div>
   </div>
@@ -700,8 +700,10 @@
 
     function openArtModal(card) {
       _currentCard = card;
-      var title = card.dataset.title;
+      var title   = card.dataset.title;
+      var fullImg = card.dataset.full;
       document.getElementById('artModalTitle').textContent = title;
+      document.getElementById('artModalView').href = fullImg;
       document.getElementById('artModalMerch').href =
         'mailto:sydkellyart@gmail.com?subject=' + encodeURIComponent('Merch inquiry: ' + title);
       document.getElementById('artModal').classList.add('open');
@@ -715,16 +717,11 @@
     }
 
     document.getElementById('artModalClose').addEventListener('click', closeArtModal);
+    document.getElementById('artModalView').addEventListener('click', closeArtModal);
+    document.getElementById('artModalMerch').addEventListener('click', closeArtModal);
 
     document.getElementById('artModal').addEventListener('click', function (e) {
       if (e.target === this) closeArtModal();
-    });
-
-    document.getElementById('artModalView').addEventListener('click', function () {
-      if (!_currentCard) return;
-      var trigger = _currentCard.querySelector('.lb-trigger');
-      closeArtModal();
-      if (trigger) trigger.click();
     });
 
     document.addEventListener('keydown', function (e) {
