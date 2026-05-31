@@ -199,6 +199,7 @@
       .hamburger { display: flex; }
       .nav-mobile-only { display: block; }
       .art-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+      #grid-canvases { grid-template-columns: 55fr 45fr; }
       .section-wrap, .search-wrap { padding-left: 20px; padding-right: 20px; }
       .section-divider { margin-left: 20px; margin-right: 20px; }
       .hero h1 { font-size: 2.8rem; }
@@ -210,7 +211,7 @@
     /* RESPONSIVE — MOBILE */
     @media(max-width: 480px) {
       .art-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .art-card-wide .art-card-img { aspect-ratio: 1; }
+      .art-card-wide .art-card-img { aspect-ratio: 3/2; }
       .hero { min-height: 480px; }
       .hero h1 { font-size: 2.2rem; }
       .hero p { font-size: .9rem; }
