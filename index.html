@@ -211,8 +211,7 @@
 
     /* RESPONSIVE — MOBILE */
     @media(max-width: 480px) {
-      .art-grid { grid-template-columns: 1fr; }
-      .art-card-wide { grid-column: span 1; }
+      .art-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .art-card-wide .art-card-img { aspect-ratio: 1; }
       .hero { min-height: 480px; }
       .hero h1 { font-size: 2.2rem; }

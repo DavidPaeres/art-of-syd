@@ -13,8 +13,8 @@ from PIL import Image
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGES_DIR = os.path.join(SCRIPT_DIR, "images")
 THUMBS_DIR = os.path.join(IMAGES_DIR, "thumbs")
-MAX_SIZE   = 600
-QUALITY    = 80
+MAX_SIZE   = 400
+QUALITY    = 65
 SKIP_DIRS  = {"thumbs"}
 
 
