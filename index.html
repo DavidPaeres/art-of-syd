@@ -32,6 +32,19 @@
     .nav-right a { color: var(--muted); text-decoration: none; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: color .2s; }
     .nav-right a:hover { color: var(--ink); }
 
+    /* HAMBURGER */
+    .hamburger {
+      display: none; flex-direction: column; justify-content: center; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 8px;
+    }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 1px; transition: transform .25s, opacity .25s; }
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile-only nav items (hidden on desktop) */
+    .nav-mobile-only { display: none; }
+
     /* HERO */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(28px); }
@@ -40,7 +53,7 @@
     .hero {
       position: relative; min-height: 700px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; overflow: hidden;
+      text-align: center; overflow: hidden; background: #111;
     }
     .hero-bg {
       position: absolute; inset: 0;
@@ -64,7 +77,7 @@
       opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: 1.6s;
     }
     .hero-btns {
-      display: flex; gap: 16px; justify-content: center;
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
       opacity: 0; animation: fadeUp .9s ease forwards; animation-delay: 1.9s;
     }
     .btn { display: inline-block; padding: 14px 36px; font-size: .75rem; letter-spacing: .15em; text-transform: uppercase; text-decoration: none; border-radius: var(--radius); font-weight: 500; transition: all .25s; }
@@ -98,6 +111,9 @@
     .art-card-title { font-size: .88rem; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
     .art-card-meta { font-size: .72rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
 
+    /* Hidden lightbox anchor — exists in DOM for lightbox2 event delegation */
+    .lb-trigger { display: none; }
+
     /* HIDDEN FOR SEARCH / SHOW MORE */
     .art-card[hidden] { display: none; }
     .art-grid[data-limit] .art-card:nth-child(n+10) { display: none; }
@@ -127,28 +143,61 @@
     .site-footer a:hover { color: #ccc; }
 
     /* WIDE CARD — spans 2 grid columns for horizontal/rectangular images */
-    .art-card-wide {
-      grid-column: span 2;
-    }
-    .art-card-wide .art-card-img {
-      aspect-ratio: 2 / 1;
-    }
+    .art-card-wide { grid-column: span 2; }
+    .art-card-wide .art-card-img { aspect-ratio: 2 / 1; }
 
     /* TALL CARD — spans 2 grid rows for vertical images */
-    .art-card-tall {
-      grid-row: span 2;
-      display: flex;
-      flex-direction: column;
-    }
-    .art-card-tall .art-card-img {
-      aspect-ratio: unset;
-      flex: 1;
-      min-height: 0;
-    }
+    .art-card-tall { grid-row: span 2; display: flex; flex-direction: column; }
+    .art-card-tall .art-card-img { aspect-ratio: unset; flex: 1; min-height: 0; }
 
+    /* ART MODAL */
+    .art-modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.6); align-items: center; justify-content: center;
+    }
+    .art-modal-overlay.open { display: flex; }
+    .art-modal {
+      background: #fff; padding: 44px 36px 36px; max-width: 340px;
+      width: calc(100% - 40px); position: relative; text-align: center;
+    }
+    .art-modal-close {
+      position: absolute; top: 14px; right: 18px;
+      background: none; border: none; font-size: 1.5rem; line-height: 1;
+      color: var(--muted); cursor: pointer;
+    }
+    .art-modal-close:hover { color: var(--ink); }
+    .art-modal h3 {
+      font-size: .78rem; font-weight: 700; letter-spacing: .18em;
+      text-transform: uppercase; margin-bottom: 28px; color: var(--ink);
+    }
+    .art-modal-btns { display: flex; flex-direction: column; gap: 10px; }
+    .btn-modal-view, .btn-modal-merch {
+      display: block; width: 100%; padding: 14px 20px;
+      font-size: .73rem; letter-spacing: .13em; text-transform: uppercase;
+      font-weight: 500; cursor: pointer; text-decoration: none; text-align: center;
+      border-radius: var(--radius); transition: all .2s;
+    }
+    .btn-modal-view { background: var(--surface); color: var(--ink); border: 1px solid var(--border); }
+    .btn-modal-view:hover { border-color: var(--ink); }
+    .btn-modal-merch { background: var(--ink); color: #fff; border: 1px solid var(--ink); }
+    .btn-modal-merch:hover { background: #333; border-color: #333; }
+
+    /* RESPONSIVE — TABLET */
     @media(max-width: 900px) {
       nav { padding: 0 20px; }
-      .nav-links { display: none; }
+      .nav-links {
+        display: none; flex-direction: column; gap: 0; list-style: none;
+        position: absolute; top: 68px; left: 0; right: 0;
+        background: #fff; border-bottom: 1px solid var(--border);
+        padding: 8px 20px 16px; z-index: 100;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { border-top: 1px solid var(--border); }
+      .nav-links li:first-child { border-top: none; }
+      .nav-links a { display: block; padding: 12px 0; font-size: .85rem; }
+      .nav-right { display: none; }
+      .hamburger { display: flex; }
+      .nav-mobile-only { display: block; }
       .art-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
       .section-wrap, .search-wrap { padding-left: 20px; padding-right: 20px; }
       .section-divider { margin-left: 20px; margin-right: 20px; }
@@ -156,9 +205,18 @@
       .quote-strip { padding: 48px 20px; }
       .art-card-tall { grid-row: auto; display: block; }
       .art-card-tall .art-card-img { aspect-ratio: 1; flex: unset; }
+      #contact { padding: 48px 20px; }
+      .site-footer { padding: 20px; }
     }
+
+    /* RESPONSIVE — MOBILE */
     @media(max-width: 480px) {
       .art-grid { grid-template-columns: 1fr; }
+      .art-card-wide { grid-column: span 1; }
+      .art-card-wide .art-card-img { aspect-ratio: 1; }
+      .hero { min-height: 480px; }
+      .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: .9rem; }
     }
   </style>
 </head>
@@ -166,17 +224,22 @@
 
   <nav>
     <a href="#" class="nav-logo">Dizzy Cult LLC</a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="navLinks">
       <li><a href="#canvases">Canvases</a></li>
       <li><a href="#watercolors">Watercolors</a></li>
       <li><a href="#colorpencils">Color Pencils</a></li>
       <li><a href="#crafts">Crafts</a></li>
       <li><a href="#woodburnings">Wood Burnings</a></li>
+      <li class="nav-mobile-only"><a href="about.html">About</a></li>
+      <li class="nav-mobile-only"><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-right">
       <a href="about.html">About</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <header class="hero" aria-label="Site intro">
@@ -200,13 +263,49 @@
   <div class="section-wrap" id="canvases">
     <div class="section-header"><h2>Canvases</h2></div>
     <div class="art-grid" id="grid-canvases">
-      <div class="art-card"><a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00446.jpg" alt="Flourescent Garden"></div></a><div class="art-card-info"><div class="art-card-title">Flourescent Garden</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card"><a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00447.jpg" alt="Whispers in the Canopy"></div></a><div class="art-card-info"><div class="art-card-title">Whispers in the Canopy</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card art-card-tall"><a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00573.JPG" alt="Sunset Madness"></div></a><div class="art-card-info"><div class="art-card-title">Sunset Madness</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card"><a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00552.JPG" alt="Gatepass Cemetery"></div></a><div class="art-card-info"><div class="art-card-title">Gatepass Cemetery</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card"><a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00553.JPG" alt="Sedona Moon"></div></a><div class="art-card-info"><div class="art-card-title">Sedona Moon</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card"><a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00554.JPG" alt="Shell of Sight"></div></a><div class="art-card-info"><div class="art-card-title">Shell of Sight</div><div class="art-card-meta">Canvas</div></div></div>
-      <div class="art-card art-card-wide"><a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)"><div class="art-card-img"><img loading="lazy" src="images/canvas/DSC00467.JPG" alt="La Garita del Diablo"></div></a><div class="art-card-info"><div class="art-card-title">La Garita del Diablo</div><div class="art-card-meta">Canvas &nbsp;·&nbsp; Sold</div></div></div>
+
+      <div class="art-card" data-full="images/canvas/DSC00446.jpg" data-title="Flourescent Garden" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00446.jpg" data-lightbox="Canvases" data-title="Flourescent Garden" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00446.jpg" alt="Flourescent Garden" onerror="this.onerror=null;this.src='images/canvas/DSC00446.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Flourescent Garden</div><div class="art-card-meta">Canvas</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/canvas/DSC00447.jpg" data-title="Whispers in the Canopy" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00447.jpg" data-lightbox="Canvases" data-title="Whispers in the Canopy" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00447.jpg" alt="Whispers in the Canopy" onerror="this.onerror=null;this.src='images/canvas/DSC00447.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Whispers in the Canopy</div><div class="art-card-meta">Canvas</div></div>
+      </div>
+
+      <div class="art-card art-card-tall" data-full="images/canvas/DSC00573.JPG" data-title="Sunset Madness" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00573.JPG" data-lightbox="Canvases" data-title="Sunset Madness" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00573.jpg" alt="Sunset Madness" onerror="this.onerror=null;this.src='images/canvas/DSC00573.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Sunset Madness</div><div class="art-card-meta">Canvas</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/canvas/DSC00552.JPG" data-title="Gatepass Cemetery" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00552.JPG" data-lightbox="Canvases" data-title="Gatepass Cemetery" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00552.jpg" alt="Gatepass Cemetery" onerror="this.onerror=null;this.src='images/canvas/DSC00552.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Gatepass Cemetery</div><div class="art-card-meta">Canvas</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/canvas/DSC00553.JPG" data-title="Sedona Moon" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00553.JPG" data-lightbox="Canvases" data-title="Sedona Moon" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00553.jpg" alt="Sedona Moon" onerror="this.onerror=null;this.src='images/canvas/DSC00553.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Sedona Moon</div><div class="art-card-meta">Canvas</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/canvas/DSC00554.JPG" data-title="Shell of Sight" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00554.JPG" data-lightbox="Canvases" data-title="Shell of Sight" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00554.jpg" alt="Shell of Sight" onerror="this.onerror=null;this.src='images/canvas/DSC00554.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Shell of Sight</div><div class="art-card-meta">Canvas</div></div>
+      </div>
+
+      <div class="art-card art-card-wide" data-full="images/canvas/DSC00467.JPG" data-title="La Garita del Diablo" onclick="openArtModal(this)">
+        <a href="images/canvas/DSC00467.JPG" data-lightbox="Canvases" data-title="La Garita del Diablo (SOLD)" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/canvas/DSC00467.jpg" alt="La Garita del Diablo" onerror="this.onerror=null;this.src='images/canvas/DSC00467.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">La Garita del Diablo</div><div class="art-card-meta">Canvas &nbsp;·&nbsp; Sold</div></div>
+      </div>
+
     </div>
   </div>
 
@@ -219,32 +318,163 @@
   <div class="section-wrap" id="watercolors">
     <div class="section-header"><h2>Watercolors</h2></div>
     <div class="art-grid" id="grid-watercolors" data-limit>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch"></div></a><div class="art-card-info"><div class="art-card-title">Pumpkin Patch</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00403.jpg" data-lightbox="Watercolors" data-title="Tamarindo"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00403.jpg" alt="Tamarindo"></div></a><div class="art-card-info"><div class="art-card-title">Tamarindo</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00405.jpg" data-lightbox="Watercolors" data-title="Sweet Yams"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00405.jpg" alt="Sweet Yams"></div></a><div class="art-card-info"><div class="art-card-title">Sweet Yams</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00406.jpg" data-lightbox="Watercolors" data-title="Penny-Eyes"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00406.jpg" alt="Penny-Eyes"></div></a><div class="art-card-info"><div class="art-card-title">Penny-Eyes</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00407.jpg" data-lightbox="Watercolors" data-title="Corazon de Monstera"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00407.jpg" alt="Corazon de Monstera"></div></a><div class="art-card-info"><div class="art-card-title">Corazon de Monstera</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00408.jpg" data-lightbox="Watercolors" data-title="Shroom-Bunny"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00408.jpg" alt="Shroom-Bunny"></div></a><div class="art-card-info"><div class="art-card-title">Shroom-Bunny</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00409.jpg" data-lightbox="Watercolors" data-title="Lucifungus"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00409.jpg" alt="Lucifungus"></div></a><div class="art-card-info"><div class="art-card-title">Lucifungus</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00410.jpg" data-lightbox="Watercolors" data-title="MushRam"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00410.jpg" alt="MushRam"></div></a><div class="art-card-info"><div class="art-card-title">MushRam</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00411.jpg" data-lightbox="Watercolors" data-title="Moon Fairy"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00411.jpg" alt="Moon Fairy"></div></a><div class="art-card-info"><div class="art-card-title">Moon Fairy</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00412.jpg" data-lightbox="Watercolors" data-title="Sporella Fairy"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00412.jpg" alt="Sporella Fairy"></div></a><div class="art-card-info"><div class="art-card-title">Sporella Fairy</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00413.jpg" data-lightbox="Watercolors" data-title="Lumora"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00413.jpg" alt="Lumora"></div></a><div class="art-card-info"><div class="art-card-title">Lumora</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00414.jpg" data-lightbox="Watercolors" data-title="Strawmycete Witch"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00414.jpg" alt="Strawmycete Witch"></div></a><div class="art-card-info"><div class="art-card-title">Strawmycete Witch</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00415.jpg" data-lightbox="Watercolors" data-title="Oculus Bloom"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00415.jpg" alt="Oculus Bloom"></div></a><div class="art-card-info"><div class="art-card-title">Oculus Bloom</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00416.jpg" data-lightbox="Watercolors" data-title="Mariquita"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00416.jpg" alt="Mariquita"></div></a><div class="art-card-info"><div class="art-card-title">Mariquita</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00418.jpg" data-lightbox="Watercolors" data-title="Blow up Alien"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00418.jpg" alt="Blow up Alien"></div></a><div class="art-card-info"><div class="art-card-title">Blow up Alien</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00419.jpg" data-lightbox="Watercolors" data-title="TamaYoshi"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00419.jpg" alt="TamaYoshi"></div></a><div class="art-card-info"><div class="art-card-title">TamaYoshi</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00420.jpg" data-lightbox="Watercolors" data-title="Kameha Takeout"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00420.jpg" alt="Kameha Takeout"></div></a><div class="art-card-info"><div class="art-card-title">Kameha Takeout</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00421.jpg" data-lightbox="Watercolors" data-title="Lego Portrait"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00421.jpg" alt="Lego Portrait"></div></a><div class="art-card-info"><div class="art-card-title">Lego Portrait</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00422.jpg" data-lightbox="Watercolors" data-title="Zelda"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00422.jpg" alt="Zelda"></div></a><div class="art-card-info"><div class="art-card-title">Zelda</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00423.jpg" data-lightbox="Watercolors" data-title="Sonoran Spectrum"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00423.jpg" alt="Sonoran Spectrum"></div></a><div class="art-card-info"><div class="art-card-title">Sonoran Spectrum</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00424.jpg" data-lightbox="Watercolors" data-title="Poppy Patch"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00424.jpg" alt="Poppy Patch"></div></a><div class="art-card-info"><div class="art-card-title">Poppy Patch</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00425.jpg" data-lightbox="Watercolors" data-title="Lunacap Oracle"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00425.jpg" alt="Lunacap Oracle"></div></a><div class="art-card-info"><div class="art-card-title">Lunacap Oracle</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00426.jpg" data-lightbox="Watercolors" data-title="Mt Lemmon Cabin"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00426.jpg" alt="Mt Lemmon Cabin"></div></a><div class="art-card-info"><div class="art-card-title">Mt Lemmon Cabin</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00555.JPG" data-lightbox="Watercolors" data-title="Velvet Bite"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00555.JPG" alt="Velvet Bite"></div></a><div class="art-card-info"><div class="art-card-title">Velvet Bite</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00556.JPG" data-lightbox="Watercolors" data-title="Frog wizard"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00556.JPG" alt="Frog wizard"></div></a><div class="art-card-info"><div class="art-card-title">Frog Wizard</div><div class="art-card-meta">Watercolor</div></div></div>
-      <div class="art-card"><a href="images/watercolorpencils/DSC00557.JPG" data-lightbox="Watercolors" data-title="Tucancillo Verde"><div class="art-card-img"><img loading="lazy" src="images/watercolorpencils/DSC00557.JPG" alt="Tucancillo Verde"></div></a><div class="art-card-info"><div class="art-card-title">Tucancillo Verde</div><div class="art-card-meta">Watercolor</div></div></div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00402.jpg" data-title="Pumpkin Patch" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00402.jpg" data-lightbox="Watercolors" data-title="Pumpkin Patch" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00402.jpg" alt="Pumpkin Patch" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00402.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Pumpkin Patch</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00403.jpg" data-title="Tamarindo" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00403.jpg" data-lightbox="Watercolors" data-title="Tamarindo" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00403.jpg" alt="Tamarindo" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00403.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Tamarindo</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00405.jpg" data-title="Sweet Yams" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00405.jpg" data-lightbox="Watercolors" data-title="Sweet Yams" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00405.jpg" alt="Sweet Yams" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00405.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Sweet Yams</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00406.jpg" data-title="Penny-Eyes" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00406.jpg" data-lightbox="Watercolors" data-title="Penny-Eyes" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00406.jpg" alt="Penny-Eyes" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00406.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Penny-Eyes</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00407.jpg" data-title="Corazon de Monstera" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00407.jpg" data-lightbox="Watercolors" data-title="Corazon de Monstera" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00407.jpg" alt="Corazon de Monstera" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00407.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Corazon de Monstera</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00408.jpg" data-title="Shroom-Bunny" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00408.jpg" data-lightbox="Watercolors" data-title="Shroom-Bunny" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00408.jpg" alt="Shroom-Bunny" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00408.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Shroom-Bunny</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00409.jpg" data-title="Lucifungus" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00409.jpg" data-lightbox="Watercolors" data-title="Lucifungus" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00409.jpg" alt="Lucifungus" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00409.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Lucifungus</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00410.jpg" data-title="MushRam" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00410.jpg" data-lightbox="Watercolors" data-title="MushRam" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00410.jpg" alt="MushRam" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00410.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">MushRam</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00411.jpg" data-title="Moon Fairy" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00411.jpg" data-lightbox="Watercolors" data-title="Moon Fairy" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00411.jpg" alt="Moon Fairy" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00411.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Moon Fairy</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00412.jpg" data-title="Sporella Fairy" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00412.jpg" data-lightbox="Watercolors" data-title="Sporella Fairy" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00412.jpg" alt="Sporella Fairy" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00412.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Sporella Fairy</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00413.jpg" data-title="Lumora" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00413.jpg" data-lightbox="Watercolors" data-title="Lumora" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00413.jpg" alt="Lumora" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00413.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Lumora</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00414.jpg" data-title="Strawmycete Witch" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00414.jpg" data-lightbox="Watercolors" data-title="Strawmycete Witch" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00414.jpg" alt="Strawmycete Witch" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00414.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Strawmycete Witch</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00415.jpg" data-title="Oculus Bloom" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00415.jpg" data-lightbox="Watercolors" data-title="Oculus Bloom" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00415.jpg" alt="Oculus Bloom" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00415.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Oculus Bloom</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00416.jpg" data-title="Mariquita" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00416.jpg" data-lightbox="Watercolors" data-title="Mariquita" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00416.jpg" alt="Mariquita" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00416.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Mariquita</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00418.jpg" data-title="Blow up Alien" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00418.jpg" data-lightbox="Watercolors" data-title="Blow up Alien" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00418.jpg" alt="Blow up Alien" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00418.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Blow up Alien</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00419.jpg" data-title="TamaYoshi" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00419.jpg" data-lightbox="Watercolors" data-title="TamaYoshi" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00419.jpg" alt="TamaYoshi" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00419.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">TamaYoshi</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00420.jpg" data-title="Kameha Takeout" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00420.jpg" data-lightbox="Watercolors" data-title="Kameha Takeout" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00420.jpg" alt="Kameha Takeout" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00420.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Kameha Takeout</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00421.jpg" data-title="Lego Portrait" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00421.jpg" data-lightbox="Watercolors" data-title="Lego Portrait" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00421.jpg" alt="Lego Portrait" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00421.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Lego Portrait</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00422.jpg" data-title="Zelda" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00422.jpg" data-lightbox="Watercolors" data-title="Zelda" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00422.jpg" alt="Zelda" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00422.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Zelda</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00423.jpg" data-title="Sonoran Spectrum" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00423.jpg" data-lightbox="Watercolors" data-title="Sonoran Spectrum" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00423.jpg" alt="Sonoran Spectrum" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00423.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Sonoran Spectrum</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00424.jpg" data-title="Poppy Patch" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00424.jpg" data-lightbox="Watercolors" data-title="Poppy Patch" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00424.jpg" alt="Poppy Patch" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00424.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Poppy Patch</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00425.jpg" data-title="Lunacap Oracle" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00425.jpg" data-lightbox="Watercolors" data-title="Lunacap Oracle" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00425.jpg" alt="Lunacap Oracle" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00425.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Lunacap Oracle</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00426.jpg" data-title="Mt Lemmon Cabin" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00426.jpg" data-lightbox="Watercolors" data-title="Mt Lemmon Cabin" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00426.jpg" alt="Mt Lemmon Cabin" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00426.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Mt Lemmon Cabin</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00555.JPG" data-title="Velvet Bite" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00555.JPG" data-lightbox="Watercolors" data-title="Velvet Bite" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00555.jpg" alt="Velvet Bite" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00555.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Velvet Bite</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00556.JPG" data-title="Frog Wizard" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00556.JPG" data-lightbox="Watercolors" data-title="Frog Wizard" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00556.jpg" alt="Frog Wizard" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00556.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Frog Wizard</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/watercolorpencils/DSC00557.JPG" data-title="Tucancillo Verde" onclick="openArtModal(this)">
+        <a href="images/watercolorpencils/DSC00557.JPG" data-lightbox="Watercolors" data-title="Tucancillo Verde" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/watercolorpencils/DSC00557.jpg" alt="Tucancillo Verde" onerror="this.onerror=null;this.src='images/watercolorpencils/DSC00557.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Tucancillo Verde</div><div class="art-card-meta">Watercolor</div></div>
+      </div>
+
     </div>
     <div class="showmore-wrap" id="wrap-more-watercolors">
       <button class="btn-showmore" id="btn-more-watercolors">Show more</button>
@@ -257,24 +487,115 @@
   <div class="section-wrap" id="colorpencils">
     <div class="section-header"><h2>Color Pencils</h2></div>
     <div class="art-grid" id="grid-colorpencils" data-limit>
-      <div class="art-card"><a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00427.jpg" alt="Goku Nimbus"></div></a><div class="art-card-info"><div class="art-card-title">Goku Nimbus</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00428.jpg" data-lightbox="Colorpencils" data-title="Bunny Bow"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00428.jpg" alt="Bunny Bow"></div></a><div class="art-card-info"><div class="art-card-title">Bunny Bow</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00429.jpg" data-lightbox="Colorpencils" data-title="Galatic Sketch"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00429.jpg" alt="Galatic Sketch"></div></a><div class="art-card-info"><div class="art-card-title">Galatic Sketch</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00430.jpg" data-lightbox="Colorpencils" data-title="Lucid Spider"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00430.jpg" alt="Lucid Spider"></div></a><div class="art-card-info"><div class="art-card-title">Lucid Spider</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00431.jpg" data-lightbox="Colorpencils" data-title="Self Portrait"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00431.jpg" alt="Self Portrait"></div></a><div class="art-card-info"><div class="art-card-title">Self Portrait</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00432.jpg" data-lightbox="Colorpencils" data-title="All-Seeing Ladybug"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00432.jpg" alt="All-Seeing Ladybug"></div></a><div class="art-card-info"><div class="art-card-title">All-Seeing Ladybug</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00433.jpg" data-lightbox="Colorpencils" data-title="Nebula Forseeing"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00433.jpg" alt="Nebula Forseeing"></div></a><div class="art-card-info"><div class="art-card-title">Nebula Forseeing</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00434.jpg" data-lightbox="Colorpencils" data-title="Mushroom Guardian"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00434.jpg" alt="Mushroom Guardian"></div></a><div class="art-card-info"><div class="art-card-title">Mushroom Guardian</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00435.jpg" data-lightbox="Colorpencils" data-title="Eclipse of Desire"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00435.jpg" alt="Eclipse of Desire"></div></a><div class="art-card-info"><div class="art-card-title">Eclipse of Desire</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00436.jpg" data-lightbox="Colorpencils" data-title="Weeping Sunfloor"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00436.jpg" alt="Weeping Sunfloor"></div></a><div class="art-card-info"><div class="art-card-title">Weeping Sunfloor</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00437.jpg" data-lightbox="Colorpencils" data-title="Storm in the Heart"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00437.jpg" alt="Storm in the Heart"></div></a><div class="art-card-info"><div class="art-card-title">Storm in the Heart</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00438.jpg" data-lightbox="Colorpencils" data-title="Tucson on the Moon"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00438.jpg" alt="Tucson on the Moon"></div></a><div class="art-card-info"><div class="art-card-title">Tucson on the Moon</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00439.jpg" data-lightbox="Colorpencils" data-title="Refractions of Me"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00439.jpg" alt="Refractions of Me"></div></a><div class="art-card-info"><div class="art-card-title">Refractions of Me</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00440.jpg" data-lightbox="Colorpencils" data-title="Kristal (unfinished)"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00440.jpg" alt="Kristal (unfinished)"></div></a><div class="art-card-info"><div class="art-card-title">Kristal (unfinished)</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00441.jpg" data-lightbox="Colorpencils" data-title="Cherry Lips &amp; Creams"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00441.jpg" alt="Cherry Lips &amp; Creams"></div></a><div class="art-card-info"><div class="art-card-title">Cherry Lips &amp; Creams</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00442.jpg" data-lightbox="Colorpencils" data-title="Donna Summers"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00442.jpg" alt="Donna Summers"></div></a><div class="art-card-info"><div class="art-card-title">Donna Summers</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00443.jpg" data-lightbox="Colorpencils" data-title="Apart in the Sky"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00443.jpg" alt="Apart in the Sky"></div></a><div class="art-card-info"><div class="art-card-title">Apart in the Sky</div><div class="art-card-meta">Color Pencil</div></div></div>
-      <div class="art-card"><a href="images/colorpencils/DSC00444.jpg" data-lightbox="Colorpencils" data-title="Prickly Pear Bloom"><div class="art-card-img"><img loading="lazy" src="images/colorpencils/DSC00444.jpg" alt="Prickly Pear Bloom"></div></a><div class="art-card-info"><div class="art-card-title">Prickly Pear Bloom</div><div class="art-card-meta">Color Pencil</div></div></div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00427.jpg" data-title="Goku Nimbus" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00427.jpg" data-lightbox="Colorpencils" data-title="Goku Nimbus" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00427.jpg" alt="Goku Nimbus" onerror="this.onerror=null;this.src='images/colorpencils/DSC00427.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Goku Nimbus</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00428.jpg" data-title="Bunny Bow" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00428.jpg" data-lightbox="Colorpencils" data-title="Bunny Bow" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00428.jpg" alt="Bunny Bow" onerror="this.onerror=null;this.src='images/colorpencils/DSC00428.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Bunny Bow</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00429.jpg" data-title="Galatic Sketch" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00429.jpg" data-lightbox="Colorpencils" data-title="Galatic Sketch" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00429.jpg" alt="Galatic Sketch" onerror="this.onerror=null;this.src='images/colorpencils/DSC00429.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Galatic Sketch</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00430.jpg" data-title="Lucid Spider" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00430.jpg" data-lightbox="Colorpencils" data-title="Lucid Spider" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00430.jpg" alt="Lucid Spider" onerror="this.onerror=null;this.src='images/colorpencils/DSC00430.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Lucid Spider</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00431.jpg" data-title="Self Portrait" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00431.jpg" data-lightbox="Colorpencils" data-title="Self Portrait" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00431.jpg" alt="Self Portrait" onerror="this.onerror=null;this.src='images/colorpencils/DSC00431.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Self Portrait</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00432.jpg" data-title="All-Seeing Ladybug" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00432.jpg" data-lightbox="Colorpencils" data-title="All-Seeing Ladybug" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00432.jpg" alt="All-Seeing Ladybug" onerror="this.onerror=null;this.src='images/colorpencils/DSC00432.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">All-Seeing Ladybug</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00433.jpg" data-title="Nebula Forseeing" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00433.jpg" data-lightbox="Colorpencils" data-title="Nebula Forseeing" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00433.jpg" alt="Nebula Forseeing" onerror="this.onerror=null;this.src='images/colorpencils/DSC00433.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Nebula Forseeing</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00434.jpg" data-title="Mushroom Guardian" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00434.jpg" data-lightbox="Colorpencils" data-title="Mushroom Guardian" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00434.jpg" alt="Mushroom Guardian" onerror="this.onerror=null;this.src='images/colorpencils/DSC00434.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Mushroom Guardian</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00435.jpg" data-title="Eclipse of Desire" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00435.jpg" data-lightbox="Colorpencils" data-title="Eclipse of Desire" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00435.jpg" alt="Eclipse of Desire" onerror="this.onerror=null;this.src='images/colorpencils/DSC00435.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Eclipse of Desire</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00436.jpg" data-title="Weeping Sunfloor" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00436.jpg" data-lightbox="Colorpencils" data-title="Weeping Sunfloor" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00436.jpg" alt="Weeping Sunfloor" onerror="this.onerror=null;this.src='images/colorpencils/DSC00436.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Weeping Sunfloor</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00437.jpg" data-title="Storm in the Heart" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00437.jpg" data-lightbox="Colorpencils" data-title="Storm in the Heart" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00437.jpg" alt="Storm in the Heart" onerror="this.onerror=null;this.src='images/colorpencils/DSC00437.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Storm in the Heart</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00438.jpg" data-title="Tucson on the Moon" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00438.jpg" data-lightbox="Colorpencils" data-title="Tucson on the Moon" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00438.jpg" alt="Tucson on the Moon" onerror="this.onerror=null;this.src='images/colorpencils/DSC00438.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Tucson on the Moon</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00439.jpg" data-title="Refractions of Me" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00439.jpg" data-lightbox="Colorpencils" data-title="Refractions of Me" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00439.jpg" alt="Refractions of Me" onerror="this.onerror=null;this.src='images/colorpencils/DSC00439.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Refractions of Me</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00440.jpg" data-title="Kristal (unfinished)" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00440.jpg" data-lightbox="Colorpencils" data-title="Kristal (unfinished)" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00440.jpg" alt="Kristal (unfinished)" onerror="this.onerror=null;this.src='images/colorpencils/DSC00440.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Kristal (unfinished)</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00441.jpg" data-title="Cherry Lips &amp; Creams" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00441.jpg" data-lightbox="Colorpencils" data-title="Cherry Lips &amp; Creams" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00441.jpg" alt="Cherry Lips &amp; Creams" onerror="this.onerror=null;this.src='images/colorpencils/DSC00441.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Cherry Lips &amp; Creams</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00442.jpg" data-title="Donna Summers" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00442.jpg" data-lightbox="Colorpencils" data-title="Donna Summers" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00442.jpg" alt="Donna Summers" onerror="this.onerror=null;this.src='images/colorpencils/DSC00442.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Donna Summers</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00443.jpg" data-title="Apart in the Sky" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00443.jpg" data-lightbox="Colorpencils" data-title="Apart in the Sky" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00443.jpg" alt="Apart in the Sky" onerror="this.onerror=null;this.src='images/colorpencils/DSC00443.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Apart in the Sky</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/colorpencils/DSC00444.jpg" data-title="Prickly Pear Bloom" onclick="openArtModal(this)">
+        <a href="images/colorpencils/DSC00444.jpg" data-lightbox="Colorpencils" data-title="Prickly Pear Bloom" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/colorpencils/DSC00444.jpg" alt="Prickly Pear Bloom" onerror="this.onerror=null;this.src='images/colorpencils/DSC00444.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">Prickly Pear Bloom</div><div class="art-card-meta">Color Pencil</div></div>
+      </div>
+
     </div>
     <div class="showmore-wrap" id="wrap-more-colorpencils">
       <button class="btn-showmore" id="btn-more-colorpencils">Show more</button>
@@ -287,9 +608,25 @@
   <div class="section-wrap" id="crafts">
     <div class="section-header"><h2>Crafts</h2></div>
     <div class="art-grid" id="grid-crafts">
-      <div class="art-card"><a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters"><div class="art-card-img"><img loading="lazy" src="images/crafts/DSC00494.JPG" alt="Mind and Hand of Still Waters"></div></a><div class="art-card-info"><div class="art-card-title">Mind and Hand of Still Waters</div><div class="art-card-meta">Craft</div></div></div>
-      <div class="art-card"><a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1"><div class="art-card-img"><img loading="lazy" src="images/crafts/craft1.jpg" alt="craft1"></div></a><div class="art-card-info"><div class="art-card-title">craft1</div><div class="art-card-meta">Craft</div></div></div>
-      <div class="art-card"><a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2"><div class="art-card-img"><img loading="lazy" src="images/crafts/craft2.jpg" alt="craft2"></div></a><div class="art-card-info"><div class="art-card-title">craft2</div><div class="art-card-meta">Craft</div></div></div>
+
+      <div class="art-card" data-full="images/crafts/DSC00494.JPG" data-title="Mind and Hand of Still Waters" onclick="openArtModal(this)">
+        <a href="images/crafts/DSC00494.JPG" data-lightbox="Crafts" data-title="Mind and Hand of Still Waters" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/crafts/DSC00494.jpg" alt="Mind and Hand of Still Waters" onerror="this.onerror=null;this.src='images/crafts/DSC00494.JPG'"></div>
+        <div class="art-card-info"><div class="art-card-title">Mind and Hand of Still Waters</div><div class="art-card-meta">Craft</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/crafts/craft1.jpg" data-title="craft1" onclick="openArtModal(this)">
+        <a href="images/crafts/craft1.jpg" data-lightbox="Crafts" data-title="craft1" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/crafts/craft1.jpg" alt="craft1" onerror="this.onerror=null;this.src='images/crafts/craft1.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">craft1</div><div class="art-card-meta">Craft</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/crafts/craft2.jpg" data-title="craft2" onclick="openArtModal(this)">
+        <a href="images/crafts/craft2.jpg" data-lightbox="Crafts" data-title="craft2" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/crafts/craft2.jpg" alt="craft2" onerror="this.onerror=null;this.src='images/crafts/craft2.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">craft2</div><div class="art-card-meta">Craft</div></div>
+      </div>
+
     </div>
   </div>
 
@@ -299,8 +636,19 @@
   <div class="section-wrap" id="woodburnings">
     <div class="section-header"><h2>Wood Burnings</h2></div>
     <div class="art-grid" id="grid-woodburnings">
-      <div class="art-card"><a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1"><div class="art-card-img"><img loading="lazy" src="images/woodburnings/wood1.png" alt="wood1"></div></a><div class="art-card-info"><div class="art-card-title">wood1</div><div class="art-card-meta">Wood Burning</div></div></div>
-      <div class="art-card"><a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2"><div class="art-card-img"><img loading="lazy" src="images/woodburnings/wood2.jpg" alt="wood2"></div></a><div class="art-card-info"><div class="art-card-title">wood2</div><div class="art-card-meta">Wood Burning</div></div></div>
+
+      <div class="art-card" data-full="images/woodburnings/wood1.png" data-title="wood1" onclick="openArtModal(this)">
+        <a href="images/woodburnings/wood1.png" data-lightbox="Woodburnings" data-title="wood1" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/woodburnings/wood1.jpg" alt="wood1" onerror="this.onerror=null;this.src='images/woodburnings/wood1.png'"></div>
+        <div class="art-card-info"><div class="art-card-title">wood1</div><div class="art-card-meta">Wood Burning</div></div>
+      </div>
+
+      <div class="art-card" data-full="images/woodburnings/wood2.jpg" data-title="wood2" onclick="openArtModal(this)">
+        <a href="images/woodburnings/wood2.jpg" data-lightbox="Woodburnings" data-title="wood2" class="lb-trigger"></a>
+        <div class="art-card-img"><img loading="lazy" src="images/thumbs/woodburnings/wood2.jpg" alt="wood2" onerror="this.onerror=null;this.src='images/woodburnings/wood2.jpg'"></div>
+        <div class="art-card-info"><div class="art-card-title">wood2</div><div class="art-card-meta">Wood Burning</div></div>
+      </div>
+
     </div>
   </div>
 
@@ -317,17 +665,81 @@
     <a href="privacy.html">Privacy Policy</a>
   </div>
 
+  <!-- ART MODAL -->
+  <div class="art-modal-overlay" id="artModal">
+    <div class="art-modal">
+      <button class="art-modal-close" id="artModalClose">&#215;</button>
+      <h3 id="artModalTitle"></h3>
+      <div class="art-modal-btns">
+        <button class="btn-modal-view" id="artModalView">View Full Size</button>
+        <a class="btn-modal-merch" id="artModalMerch" href="#">Shop Merch</a>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
   <script>
     if (window.lightbox) lightbox.option({ albumLabel: 'Image %1 of %2', fadeDuration: 200, resizeDuration: 200 });
 
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', function () {
+      const open = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('active', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Art Modal
+    var _currentCard = null;
+
+    function openArtModal(card) {
+      _currentCard = card;
+      var title = card.dataset.title;
+      document.getElementById('artModalTitle').textContent = title;
+      document.getElementById('artModalMerch').href =
+        'mailto:sydkellyart@gmail.com?subject=' + encodeURIComponent('Merch inquiry: ' + title);
+      document.getElementById('artModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeArtModal() {
+      document.getElementById('artModal').classList.remove('open');
+      document.body.style.overflow = '';
+      _currentCard = null;
+    }
+
+    document.getElementById('artModalClose').addEventListener('click', closeArtModal);
+
+    document.getElementById('artModal').addEventListener('click', function (e) {
+      if (e.target === this) closeArtModal();
+    });
+
+    document.getElementById('artModalView').addEventListener('click', function () {
+      if (!_currentCard) return;
+      var trigger = _currentCard.querySelector('.lb-trigger');
+      closeArtModal();
+      if (trigger) trigger.click();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeArtModal();
+    });
+
     // Show more
     function setupShowMore(gridId, btnId, wrapId) {
-      const grid = document.getElementById(gridId);
-      const btn  = document.getElementById(btnId);
-      const wrap = document.getElementById(wrapId);
+      var grid = document.getElementById(gridId);
+      var btn  = document.getElementById(btnId);
+      var wrap = document.getElementById(wrapId);
       if (!grid || !btn) return;
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', function () {
         grid.classList.add('expanded');
         grid.removeAttribute('data-limit');
         wrap.style.display = 'none';
@@ -337,27 +749,28 @@
     setupShowMore('grid-colorpencils', 'btn-more-colorpencils', 'wrap-more-colorpencils');
 
     // Search
-    const q = document.getElementById('searchGlobal');
-    const allGrids = ['grid-canvases','grid-watercolors','grid-colorpencils','grid-crafts','grid-woodburnings'].map(id => document.getElementById(id)).filter(Boolean);
-    const limitedGrids = ['grid-watercolors','grid-colorpencils'];
+    var q        = document.getElementById('searchGlobal');
+    var allGrids = ['grid-canvases','grid-watercolors','grid-colorpencils','grid-crafts','grid-woodburnings']
+                    .map(function (id) { return document.getElementById(id); }).filter(Boolean);
+    var limitedGrids = ['grid-watercolors','grid-colorpencils'];
 
-    q.addEventListener('input', () => {
-      const term = q.value.trim().toLowerCase();
-      const searching = term.length > 0;
+    q.addEventListener('input', function () {
+      var term      = q.value.trim().toLowerCase();
+      var searching = term.length > 0;
 
       if (searching) {
-        limitedGrids.forEach(id => {
-          const g = document.getElementById(id);
+        limitedGrids.forEach(function (id) {
+          var g = document.getElementById(id);
           if (g) { g.classList.add('expanded'); g.removeAttribute('data-limit'); }
         });
         document.getElementById('wrap-more-watercolors').style.display  = 'none';
         document.getElementById('wrap-more-colorpencils').style.display = 'none';
       }
 
-      allGrids.forEach(grid => {
-        grid.querySelectorAll('.art-card').forEach(card => {
-          const title = (card.querySelector('img')?.alt || '').toLowerCase();
-          const meta  = (card.querySelector('.art-card-meta')?.textContent || '').toLowerCase();
+      allGrids.forEach(function (grid) {
+        grid.querySelectorAll('.art-card').forEach(function (card) {
+          var title = (card.querySelector('img') ? card.querySelector('img').alt : '').toLowerCase();
+          var meta  = (card.querySelector('.art-card-meta') ? card.querySelector('.art-card-meta').textContent : '').toLowerCase();
           card.style.display = searching ? (title.includes(term) || meta.includes(term) ? '' : 'none') : '';
         });
       });
